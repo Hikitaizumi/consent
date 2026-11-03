@@ -346,8 +346,9 @@ select.inp{padding-right:30px;background-image:linear-gradient(45deg,transparent
             <input class="inp" id="f-card" type="text" inputmode="numeric" maxlength="20" placeholder="わかる場合のみ" autocomplete="off">
           </div>
           <div class="field" data-f="doctor" id="doctor-field" hidden>
-            <label class="lbl" for="f-doctor">説明を担当した歯科医師<span class="tag opt">任意</span></label>
+            <label class="lbl" for="f-doctor">説明を担当した歯科医師<span class="tag req">必須</span></label>
             <select class="inp" id="f-doctor"></select>
+            <span class="hint">わからない場合は、スタッフにお尋ねください。</span>
           </div>
         </div>
 
@@ -493,10 +494,10 @@ var CONFIG = {
   stampName: '泉矯正歯科',          // 完了画面の受付印に入る名前（6文字以内が目安）
   // Google Apps Script を「ウェブアプリ」として公開したURL（…/exec）を貼り付けます。
   // 空欄のままだとテスト表示になり、医院への送信は行われません。
-  endpoint: 'https://script.google.com/macros/s/AKfycbyHyGYumhs-TewWLMQfxX2EQRRNMMgCmZNXJTCbs_FpnuFrjhpmuPsZNTq24pK3PDFH/exec',
+  endpoint: '',
   formKey: 'ck_red7kqvOLG74nn43Vdfmb0l4',            // Code.gs の FORM_KEY と同じ文字列（変更不要）
   docVersion: '2026.11.03',          // 同意書の版。文面を変えたら更新してください
-  doctors: [],                       // 例：['疋田 ○○', '泉 ○○']。空なら歯科医師欄は空欄で出力（印刷後に記入）
+  doctors: ['山原　章司', '𠮷田　光志'],     // 患者さまが選んだ名前が歯科医師氏名欄に印字されます（空 [] なら空欄で出力）
   guardianAge: 20,                   // この年齢未満の方は保護者の署名が必要
   dateStyle: 'seireki',              // 'seireki' → 2026年11月2日 ／ 'wareki' → 令和8年11月2日
   pdfDpi: 200                        // PDFの解像度（200で十分きれいに印刷できます）
@@ -1022,7 +1023,7 @@ var DOCUMENTS = {
 
     if (CONFIG.doctors && CONFIG.doctors.length) {
       var ds = $('#f-doctor');
-      ds.appendChild(el('option', { value: '' }, 'わからない場合は空欄のまま'));
+      ds.appendChild(el('option', { value: '' }, '選んでください'));
       CONFIG.doctors.forEach(function (n) { ds.appendChild(el('option', { value: n }, n)); });
       $('#doctor-field').hidden = false;
     }
@@ -1109,6 +1110,7 @@ var DOCUMENTS = {
     else if (currentPlan() && currentPlan().group === 'child' && patientAge() >= CONFIG.guardianAge) bad('dob', '小児の治療が選ばれています。お子さまの生年月日をご確認ください。');
     if (!v.address) bad('address', 'ご住所を入力してください。');
     if (v.phone && !/^[0-9０-９\-－ー()（）+＋\s]{10,20}$/.test(v.phone)) bad('phone', '電話番号をご確認ください。');
+    if (CONFIG.doctors && CONFIG.doctors.length && !v.doctor) bad('doctor', '説明を担当した歯科医師を選んでください。');
     if (v.guardian) {
       if (!v.guardian.name) bad('gname', '保護者さまのお名前を入力してください。');
       if (!v.guardian.relation) bad('grel', '続柄を選んでください。');
@@ -1216,6 +1218,7 @@ var DOCUMENTS = {
     var age = patientAge();
     var facts = [['治療内容', p.label + (opts.length ? '＋' + opts.join('・') : '')], ['患者さま', info.name + ' さま（' + age + '歳）']];
     if (info.guardian) facts.push(['保護者さま', info.guardian.name + ' さま（' + info.guardian.relation + '）']);
+    if (info.doctor) facts.push(['説明した歯科医師', info.doctor]);
     facts.push(['同意日', fmtDate(today)]);
     facts.forEach(function (f) { dl.appendChild(el('dt', null, f[0])); dl.appendChild(el('dd', null, f[1])); });
 
