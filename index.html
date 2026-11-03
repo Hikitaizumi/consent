@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="ja" data-fs="m">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#eef1f3">
+<title>矯正治療の同意書</title>
+<!--
+  ==========================================================================
+  矯正治療 電子同意書（患者さま用ページ）
+  --------------------------------------------------------------------------
+  ・このファイル1つで動きます（外部の読み込みはありません）。
+  ・医院ごとの設定は、下の <script> 内「CONFIG」を書き換えてください。
+  ・同意書の文面は「DOCUMENTS」に入っています。文面を変えたら
+    CONFIG.docVersion（版）も更新してください。
+  ・入力内容・署名はこの端末に保存されず、医院（Google Apps Script）
+    にだけ送信されます。
+  ==========================================================================
+-->
+<style>
+:root{
+  --desk:#eef1f3; --sheet:#ffffff;
+  --ink:#1e2b38; --ink-2:#536170; --ink-3:#7f8a96;
+  --rule:#cdd5dc; --rule-2:#e2e7eb; --steel:#a7b1bb;
+  --pen:#23418e; --pen-2:#1a3270; --pen-tint:#eaf0fa;
+  --shu:#c4402a; --err:#a8261b; --err-bg:#fcefed;
+  --sans:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic UI","Yu Gothic","YuGothic","Meiryo",system-ui,sans-serif;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","MS PMincho",serif;
+  --doc-size:17px;
+}
+html[data-fs="s"]{--doc-size:15px}
+html[data-fs="l"]{--doc-size:20px}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;background:var(--desk);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font-family:inherit;color:inherit}
+a{color:var(--pen)}
+.sr{position:absolute !important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid rgba(35,65,142,.45);outline-offset:2px}
+
+.app{max-width:680px;margin:0 auto;padding:0 16px 40px;padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+
+/* ---- masthead ---- */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;padding:18px 0 10px}
+.clinic{margin:0;font-size:13px;color:var(--ink-2);letter-spacing:.06em}
+.app-title{margin:1px 0 0;font-size:21px;line-height:1.4;font-weight:700;letter-spacing:.05em}
+.fs{display:flex;align-items:center;font-size:12px;color:var(--ink-2)}
+.fs-label{margin-right:6px}
+.fs-btns{display:flex;border:1px solid var(--rule);border-radius:7px;overflow:hidden;background:var(--sheet)}
+.fs-btns button{appearance:none;-webkit-appearance:none;border:0;background:transparent;min-width:38px;min-height:36px;padding:0 6px;cursor:pointer;color:var(--ink-2)}
+.fs-btns button+button{border-left:1px solid var(--rule)}
+.fs-btns button[data-fs="s"]{font-size:12px}
+.fs-btns button[data-fs="m"]{font-size:15px}
+.fs-btns button[data-fs="l"]{font-size:18px}
+.fs-btns button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* ---- archwire progress ---- */
+.wire{list-style:none;margin:6px 0 22px;padding:0;display:flex;position:relative;--p:0%}
+.wire::before{content:"";position:absolute;left:10%;right:10%;top:9px;height:2px;background:linear-gradient(to right,var(--pen) var(--p),var(--steel) var(--p))}
+.wire li{position:relative;z-index:1;flex:1 1 0;text-align:center;font-size:11.5px;line-height:1.4;color:var(--ink-3)}
+.wire .br{display:block;width:20px;height:20px;margin:0 auto 5px;border:2px solid var(--steel);border-radius:4px;background:var(--desk);position:relative}
+.wire .br::after{content:"";position:absolute;left:2px;right:2px;top:50%;height:2px;margin-top:-1px;background:var(--steel)}
+.wire li.done .br{border-color:var(--pen);background:var(--pen)}
+.wire li.done .br::after{background:rgba(255,255,255,.85)}
+.wire li.now .br{border-color:var(--pen);background:var(--sheet)}
+.wire li.now .br::after{background:var(--pen)}
+.wire li.now{color:var(--ink);font-weight:700}
+
+/* ---- step headings ---- */
+.step-title{margin:0 0 6px;font-size:20px;line-height:1.5;font-weight:700;letter-spacing:.03em}
+.step-lead{margin:0 0 18px;color:var(--ink-2);font-size:15px}
+.step-title,.step-lead,.choice-label,.choice-desc,.notice,.done-title,.agree-hint,.sig-note,.pad-title,.pad-hint{word-break:auto-phrase;text-wrap:pretty}
+
+/* ---- choices (form rows) ---- */
+.choices{margin:0 0 16px;padding:0;border:1px solid var(--rule);background:var(--sheet);border-radius:8px;overflow:hidden;min-width:0}
+.choices legend{float:left;width:100%;padding:12px 16px 10px;font-size:14px;font-weight:700;color:var(--ink-2);letter-spacing:.04em;background:#f7f9fa;border-bottom:1px solid var(--rule-2)}
+.choices legend+*{clear:both}
+.choices-note{clear:both;margin:0;padding:10px 16px 2px;font-size:13.5px;color:var(--ink-2)}
+.choice{position:relative;display:flex;align-items:flex-start;padding:14px 16px;cursor:pointer;border-top:1px solid var(--rule-2)}
+.choices legend+.choice,.choices-note+.choice{border-top:0}
+.choice input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.choice .mark{flex:none;width:24px;height:24px;margin:1px 14px 0 0;border:2px solid var(--ink-3);background:var(--sheet);position:relative}
+.choice.radio .mark{border-radius:50%}
+.choice.checkbox .mark{border-radius:5px}
+.choice-body{display:block;min-width:0}
+.choice-label{display:block;font-size:16.5px;font-weight:700;line-height:1.5}
+.choice-desc{display:block;font-size:13.5px;color:var(--ink-2);line-height:1.6;margin-top:2px}
+.choice.is-checked{background:var(--pen-tint)}
+.choice.is-checked .mark{border-color:var(--pen);background:var(--pen)}
+.choice.radio.is-checked .mark::after{content:"";position:absolute;left:5px;top:5px;width:10px;height:10px;border-radius:50%;background:#fff}
+.choice.checkbox.is-checked .mark::after{content:"";position:absolute;left:6px;top:1px;width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.choice.has-focus{box-shadow:inset 0 0 0 3px rgba(35,65,142,.45)}
+
+.doclist{margin:4px 0 0;padding:14px 16px;border-left:3px solid var(--pen);background:var(--sheet)}
+.doclist-h{margin:0 0 4px;font-size:14px;font-weight:700}
+.doclist ol{margin:0;padding-left:1.4em;font-size:14.5px;line-height:1.7;color:var(--ink-2)}
+
+/* ---- fields ---- */
+.card{background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:18px 16px 4px;margin-bottom:16px}
+.card-h{margin:0 0 12px;font-size:15px;font-weight:700;color:var(--ink-2);letter-spacing:.04em}
+.field{margin-bottom:18px}
+.lbl{display:block;font-size:15px;font-weight:700;margin-bottom:6px}
+.tag{display:inline-block;margin-left:8px;padding:0 6px;font-size:11.5px;line-height:1.7;font-weight:700;border-radius:3px;vertical-align:2px}
+.tag.req{background:var(--ink-2);color:#fff}
+.tag.opt{border:1px solid var(--rule);color:var(--ink-3);font-weight:500}
+.hint{display:block;font-size:13px;color:var(--ink-3);margin-top:5px}
+.inp{display:block;width:100%;font-size:17px;line-height:1.5;padding:11px 12px;border:1.5px solid var(--rule);border-radius:7px;background:#fff;-webkit-appearance:none;appearance:none}
+textarea.inp{resize:vertical;min-height:76px}
+select.inp{padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,var(--ink-2) 50%),linear-gradient(135deg,var(--ink-2) 50%,transparent 50%);background-position:calc(100% - 17px) 52%,calc(100% - 12px) 52%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.inp:focus{outline:none;border-color:var(--pen);box-shadow:0 0 0 3px rgba(35,65,142,.18)}
+.dob{display:flex;flex-wrap:wrap;align-items:center;margin-right:-10px}
+.dob-y{flex:1 1 230px;margin:0 10px 8px 0}
+.dob-md{flex:1 1 200px;display:flex;align-items:center;margin:0 10px 8px 0}
+.dob-md select{flex:1 1 0;min-width:0}
+.dob-md span{flex:none;margin:0 8px 0 6px;font-size:15px}
+.dob-md span:last-child{margin-right:0}
+.age{display:block;margin-top:6px;font-size:14px;color:var(--ink-2)}
+.field.invalid .inp{border-color:var(--err)}
+.err{margin:6px 0 0;font-size:14px;color:var(--err);font-weight:600}
+.guardian-note{margin:0 0 14px;font-size:14px;color:var(--ink-2)}
+
+/* ---- buttons ---- */
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;padding:12px 18px;border-radius:9px;font-size:17px;font-weight:700;letter-spacing:.04em;border:1.5px solid transparent;cursor:pointer;-webkit-appearance:none;appearance:none;text-decoration:none;line-height:1.4;text-align:center}
+.btn.primary{background:var(--pen);color:#fff}
+.btn.primary:active{background:var(--pen-2)}
+.btn.primary:disabled{background:#a3adbd;cursor:not-allowed}
+.btn.ghost{background:var(--sheet);color:var(--ink);border-color:var(--rule)}
+.btn.ghost:active{background:#f3f5f7}
+.btn.small{min-height:44px;font-size:15px}
+.actions{display:flex;margin-top:22px}
+.actions .btn+.btn{margin-left:10px}
+.actions .back{flex:0 0 30%}
+.linkbtn{appearance:none;-webkit-appearance:none;background:none;border:0;padding:8px 2px;font-size:15px;color:var(--pen);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* ---- document sheet ---- */
+.readbar{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 10px}
+.readbar-count{font-size:14px;color:var(--ink-2);font-weight:700}
+.readbar-count b{font-size:17px;color:var(--ink)}
+.sheet{background:var(--sheet);border:1px solid var(--rule);padding:28px 18px 24px;margin:0 -2px}
+.doc{font-size:var(--doc-size);line-height:1.9;overflow-wrap:anywhere}
+.doc-title{margin:0 0 .25em;font-family:var(--serif);font-weight:700;font-size:1.2em;line-height:1.55;text-align:center;letter-spacing:.05em}
+.doc-sub{margin:0 0 1.1em;text-align:center;font-size:.9em;color:var(--ink-2)}
+.doc-lead{margin:1em 0 .9em;text-indent:1em}
+.doc-h{margin:1.5em 0 .3em;font-size:1em;font-weight:700;line-height:1.7}
+.doc-sec{margin:1.8em 0 .8em;padding:.35em 0;font-family:var(--serif);font-size:1.08em;font-weight:700;text-align:center;letter-spacing:.25em;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.doc-title+.doc-sec{margin-top:1em}
+.doc-p{margin:.2em 0 .7em;padding-left:1em;text-indent:1em}
+.doc-imp{margin:1em 0 .2em;padding-left:1em;font-weight:700}
+.doc-item{display:flex;margin:.15em 0 .4em;padding-left:1em}
+.doc-item.lv2{padding-left:2.4em}
+.doc-item .mk{flex:none;min-width:1.4em;padding-right:.35em}
+.doc-item .tx{flex:1 1 auto;min-width:0}
+.doc-center{margin:1.2em 0;text-align:center}
+.doc-right{margin:1.4em 0 .4em;text-align:right}
+.doc .u{text-decoration:underline;text-underline-offset:.22em}
+.doc-fill{margin:0 0 1.2em;padding:.6em .9em;background:#f6f8f9;border:1px solid var(--rule-2);font-size:.92em;line-height:1.8}
+.doc-fill dl{margin:0;display:grid;grid-template-columns:auto 1fr;column-gap:.8em}
+.doc-fill dt{color:var(--ink-2)}
+.doc-fill dd{margin:0;font-weight:700;overflow-wrap:anywhere}
+.doc-fill .later{font-weight:400;color:var(--ink-3)}
+.doc-foot{margin:1.6em 0 0;font-size:.92em}
+
+.agree{position:relative;display:flex;align-items:flex-start;margin:16px 0 0;padding:16px;background:var(--sheet);border:2px solid var(--ink-2);border-radius:9px;cursor:pointer;font-size:var(--doc-size);line-height:1.75;font-weight:700}
+.agree input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.agree .box{flex:none;width:28px;height:28px;margin:1px 14px 0 0;border:2px solid var(--ink-2);border-radius:6px;background:#fff;position:relative}
+.agree.is-checked{border-color:var(--pen);background:var(--pen-tint)}
+.agree.is-checked .box{background:var(--pen);border-color:var(--pen)}
+.agree.is-checked .box::after{content:"";position:absolute;left:8px;top:2px;width:8px;height:15px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.agree.has-focus{box-shadow:0 0 0 3px rgba(35,65,142,.35)}
+.agree-h{display:block;font-size:.88em;color:var(--ink-2)}
+.agree-hint{margin:8px 2px 0;font-size:13.5px;color:var(--ink-3)}
+
+/* ---- signing ---- */
+.summary{margin:0;padding:0;list-style:none}
+.summary li{position:relative;padding:7px 0 7px 26px;border-top:1px solid var(--rule-2);font-size:15px;line-height:1.6}
+.summary li:first-child{border-top:0}
+.summary li::before{content:"";position:absolute;left:4px;top:13px;width:6px;height:11px;border:solid var(--pen);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.facts{margin:6px 0 14px;display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:2px;font-size:15px}
+.facts dt{color:var(--ink-2)}
+.facts dd{margin:0;font-weight:700;overflow-wrap:anywhere}
+.sigfield{margin:0 0 18px}
+.sigbox{position:relative;display:block;width:100%;height:132px;padding:0;background:#fff;border:2px dashed var(--steel);border-radius:9px;cursor:pointer;-webkit-appearance:none;appearance:none;overflow:hidden}
+.sigbox .x{position:absolute;left:18px;bottom:30px;font-size:24px;line-height:1;color:var(--ink-3)}
+.sigbox .line{position:absolute;left:16px;right:16px;bottom:28px;border-bottom:1.5px solid var(--rule)}
+.sigbox .prompt{position:absolute;left:0;right:0;top:34px;text-align:center;font-size:16px;font-weight:700;color:var(--pen)}
+.sigbox img{position:absolute;left:12px;right:12px;top:8px;bottom:8px;width:calc(100% - 24px);height:calc(100% - 16px);object-fit:contain;object-position:left center}
+.sigbox.signed{border-style:solid;border-color:var(--rule)}
+.sigbox.signed .prompt,.sigbox.signed .x{display:none}
+.sigfield.invalid .sigbox{border-color:var(--err)}
+.sigfield-foot{display:flex;justify-content:flex-end}
+.sig-note{margin:0 0 4px;font-size:13.5px;color:var(--ink-2)}
+
+/* ---- signature pad (modal) ---- */
+.pad{position:fixed;top:0;right:0;bottom:0;left:0;z-index:50;background:var(--desk);display:flex;flex-direction:column}
+.pad-inner{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;width:100%;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.pad-head{padding:12px 18px 8px;padding-left:max(18px,env(safe-area-inset-left))}
+.pad-title{margin:0;font-size:18px;font-weight:700}
+.pad-hint{margin:2px 0 0;font-size:14px;color:var(--ink-2)}
+.pad-area{position:relative;flex:1 1 auto;min-height:160px;margin:4px 12px 0;background:#fff;border:1.5px solid var(--rule);border-radius:10px;touch-action:none;-ms-touch-action:none;overflow:hidden;cursor:crosshair}
+.pad-area canvas{position:absolute;left:0;top:0;touch-action:none;-ms-touch-action:none}
+.pad-area .base{position:absolute;left:6%;right:6%;bottom:26%;border-bottom:2px solid var(--rule-2);pointer-events:none}
+.pad-area .x{position:absolute;left:6%;bottom:calc(26% + 8px);font-size:30px;line-height:1;color:var(--steel);pointer-events:none}
+.pad-area .rot{position:absolute;left:0;right:0;top:12px;text-align:center;font-size:13px;color:var(--ink-3);pointer-events:none}
+.pad-err{margin:6px 18px 0;font-size:14px;color:var(--err);font-weight:700;min-height:0}
+.pad-actions{display:grid;grid-template-columns:1fr 1fr;grid-gap:8px;padding:10px 12px 12px}
+.pad-actions .btn{width:auto;min-height:48px;font-size:15.5px;padding:6px 10px}
+.pad-actions .undo,.pad-actions .clr{min-height:42px;font-size:14.5px}
+@media (min-width:640px){.pad-actions{grid-template-columns:1fr 1fr 1fr 1.6fr}.pad-actions .undo,.pad-actions .clr{min-height:48px}}
+@media (orientation:landscape) and (max-height:500px){
+  .pad-head{padding-top:6px;padding-bottom:4px}
+  .pad-hint{display:none}
+  .pad-area .rot{display:none}
+  .pad-actions{padding-top:6px;padding-bottom:6px;grid-template-columns:1fr 1fr 1fr 1.6fr}
+  .pad-actions .btn,.pad-actions .undo,.pad-actions .clr{min-height:42px}
+}
+@media (orientation:landscape){.pad-area .rot{display:none}}
+@media (min-width:760px) and (min-height:600px){
+  .pad{background:rgba(30,43,56,.55);align-items:center;justify-content:center}
+  .pad-inner{flex:none;width:min(880px,92vw);height:min(520px,82vh);background:var(--desk);border-radius:14px;padding:6px 6px 0;box-shadow:0 18px 50px rgba(20,30,40,.35)}
+}
+
+/* ---- busy ---- */
+.busy{position:fixed;top:0;right:0;bottom:0;left:0;z-index:70;background:rgba(238,241,243,.94);display:flex;align-items:center;justify-content:center;padding:24px}
+.busy-box{text-align:center;max-width:320px}
+.spin{width:38px;height:38px;margin:0 auto 14px;border:3px solid var(--rule);border-top-color:var(--pen);border-radius:50%;animation:spin 1s linear infinite}
+.busy-text{margin:0;font-size:16px;font-weight:700}
+.busy-sub{margin:4px 0 0;font-size:13.5px;color:var(--ink-2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---- done ---- */
+.done-head{text-align:center;padding:4px 0 6px}
+.stamp{display:block;width:136px;height:136px;margin:4px auto 8px;color:var(--shu);transform:rotate(-8deg);opacity:.93}
+.stamp.press{animation:press .46s cubic-bezier(.2,.85,.3,1.15) both}
+@keyframes press{0%{transform:scale(1.75) rotate(-17deg);opacity:0}60%{transform:scale(.95) rotate(-7deg);opacity:.96}100%{transform:scale(1) rotate(-8deg);opacity:.93}}
+.done-title{margin:0;font-size:21px;font-weight:700;letter-spacing:.04em}
+.receipt{margin:6px 0 0;font-size:15px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.receipt b{color:var(--ink);letter-spacing:.06em}
+.notice{margin:16px 0;padding:13px 15px;border-radius:8px;background:var(--sheet);border:1px solid var(--rule);font-size:14.5px;line-height:1.75}
+.notice.error{background:var(--err-bg);border-color:#e7b9b3;color:#6e1a12}
+.notice.test{background:#fff8ea;border-color:#ead29e;color:#5b4304}
+.notice p{margin:0}
+.notice p+p{margin-top:6px}
+.pdf-actions .btn{margin-top:10px}
+.thumbs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 2px 12px;margin:18px -2px 0}
+.thumbs a{flex:none;margin-right:10px;display:block;line-height:0}
+.thumbs img{height:156px;width:auto;border:1px solid var(--rule);background:#fff}
+.thumbs-cap{margin:12px 0 0;font-size:13.5px;color:var(--ink-2)}
+.restart{margin-top:28px;padding-top:18px;border-top:1px solid var(--rule)}
+
+.testbar{position:sticky;top:0;z-index:40;padding:8px 16px;background:#fff3d6;border-bottom:1px solid #ead29e;color:#5b4304;font-size:13px;font-weight:700;text-align:center;line-height:1.5}
+.foot{margin-top:30px;font-size:12.5px;line-height:1.7;color:var(--ink-3);text-align:center}
+
+@media (min-width:600px){
+  .sheet{padding:44px 48px 36px}
+  .wire li{font-size:12.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  .stamp.press{animation:none}
+  .spin{animation-duration:3s}
+}
+</style>
+</head>
+<body>
+<div class="testbar" id="testbar" role="note" hidden>テスト表示中です。送信先が未設定のため、署名しても医院には届きません。</div>
+<div class="app">
+  <header class="masthead">
+    <div>
+      <p class="clinic" id="clinic-name"></p>
+      <h1 class="app-title">矯正治療の同意書</h1>
+    </div>
+    <div class="fs" role="group" aria-label="文字の大きさ">
+      <span class="fs-label" aria-hidden="true">文字</span>
+      <div class="fs-btns">
+        <button type="button" data-fs="s" aria-pressed="false" aria-label="文字を小さく">小</button>
+        <button type="button" data-fs="m" aria-pressed="true" aria-label="文字を標準に">中</button>
+        <button type="button" data-fs="l" aria-pressed="false" aria-label="文字を大きく">大</button>
+      </div>
+    </div>
+  </header>
+
+  <ol class="wire" id="wire" aria-label="手続きの進み具合">
+    <li data-step="plan"><span class="br" aria-hidden="true"></span>治療内容</li>
+    <li data-step="info"><span class="br" aria-hidden="true"></span>お名前など</li>
+    <li data-step="read"><span class="br" aria-hidden="true"></span>同意書</li>
+    <li data-step="sign"><span class="br" aria-hidden="true"></span>署名</li>
+    <li data-step="done"><span class="br" aria-hidden="true"></span>完了</li>
+  </ol>
+
+  <main>
+    <!-- 1. 治療内容 -->
+    <section class="step" id="step-plan" aria-labelledby="h-plan">
+      <h2 class="step-title" id="h-plan" tabindex="-1">受ける治療を選んでください</h2>
+      <p class="step-lead">担当医から説明を受けた内容を選んでください。わからない場合は、スタッフにお声がけください。</p>
+      <div id="plan-groups"></div>
+      <p class="err" id="plan-err" role="alert" hidden></p>
+      <div class="doclist" id="doclist" hidden>
+        <p class="doclist-h" id="doclist-h"></p>
+        <ol id="doclist-ol"></ol>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="plan-next">次へ</button>
+      </div>
+    </section>
+
+    <!-- 2. お名前など -->
+    <section class="step" id="step-info" aria-labelledby="h-info" hidden>
+      <h2 class="step-title" id="h-info" tabindex="-1">患者さまの情報を入力してください</h2>
+      <p class="step-lead">入力した内容は、同意書の該当欄に記載されます。</p>
+      <form id="info-form" novalidate autocomplete="off">
+        <div class="card">
+          <p class="card-h" id="patient-card-h">患者さま</p>
+          <div class="field" data-f="name">
+            <label class="lbl" for="f-name"><span id="name-label">お名前</span><span class="tag req">必須</span></label>
+            <input class="inp" id="f-name" type="text" maxlength="40" placeholder="例）泉 太郎" autocomplete="off">
+          </div>
+          <div class="field" data-f="kana">
+            <label class="lbl" for="f-kana">ふりがな<span class="tag opt">任意</span></label>
+            <input class="inp" id="f-kana" type="text" maxlength="60" placeholder="例）いずみ たろう" autocomplete="off">
+          </div>
+          <div class="field" data-f="dob">
+            <span class="lbl" id="dob-label">生年月日<span class="tag req">必須</span></span>
+            <div class="dob" role="group" aria-labelledby="dob-label">
+              <div class="dob-y"><select class="inp" id="f-dob-y" aria-label="生まれた年"></select></div>
+              <div class="dob-md">
+                <select class="inp" id="f-dob-m" aria-label="生まれた月"></select><span>月</span>
+                <select class="inp" id="f-dob-d" aria-label="生まれた日"></select><span>日</span>
+              </div>
+            </div>
+            <span class="age" id="age-out" aria-live="polite"></span>
+          </div>
+          <div class="field" data-f="address">
+            <label class="lbl" for="f-address">ご住所<span class="tag req">必須</span></label>
+            <textarea class="inp" id="f-address" rows="2" maxlength="120" placeholder="例）〒000-0000 ○○県○○市…" autocomplete="off"></textarea>
+            <span class="hint">支払誓約書の住所欄に記載されます。</span>
+          </div>
+          <div class="field" data-f="phone">
+            <label class="lbl" for="f-phone">電話番号<span class="tag opt">任意</span></label>
+            <input class="inp" id="f-phone" type="tel" inputmode="tel" maxlength="20" placeholder="例）090-0000-0000" autocomplete="off">
+          </div>
+          <div class="field" data-f="card">
+            <label class="lbl" for="f-card">診察券番号<span class="tag opt">任意</span></label>
+            <input class="inp" id="f-card" type="text" inputmode="numeric" maxlength="20" placeholder="わかる場合のみ" autocomplete="off">
+          </div>
+          <div class="field" data-f="doctor" id="doctor-field" hidden>
+            <label class="lbl" for="f-doctor">説明を担当した歯科医師<span class="tag opt">任意</span></label>
+            <select class="inp" id="f-doctor"></select>
+          </div>
+        </div>
+
+        <div class="card" id="guardian-card" hidden>
+          <p class="card-h">保護者さま</p>
+          <p class="guardian-note" id="guardian-note"></p>
+          <div class="field" data-f="gname">
+            <label class="lbl" for="f-gname">保護者さまのお名前<span class="tag req">必須</span></label>
+            <input class="inp" id="f-gname" type="text" maxlength="40" placeholder="例）泉 花子" autocomplete="off">
+          </div>
+          <div class="field" data-f="grel">
+            <label class="lbl" for="f-grel">患者さまとのご関係（続柄）<span class="tag req">必須</span></label>
+            <select class="inp" id="f-grel">
+              <option value="">選んでください</option>
+              <option>母</option><option>父</option><option>祖母</option><option>祖父</option><option value="__other">その他</option>
+            </select>
+            <input class="inp" id="f-grel-other" type="text" maxlength="20" placeholder="続柄を入力（例：叔母）" style="margin-top:8px" hidden autocomplete="off">
+          </div>
+        </div>
+      </form>
+      <div class="actions">
+        <button type="button" class="btn ghost back" data-back>戻る</button>
+        <button type="button" class="btn primary" id="info-next">次へ</button>
+      </div>
+    </section>
+
+    <!-- 3. 同意書の確認 -->
+    <section class="step" id="step-read" aria-labelledby="h-read" hidden>
+      <h2 class="step-title" id="h-read" tabindex="-1">同意書をお読みください</h2>
+      <div class="readbar"><p class="readbar-count" id="read-count"></p></div>
+      <div id="read-doc"></div>
+      <label class="agree" id="agree">
+        <input type="checkbox" id="agree-cb">
+        <span class="box" aria-hidden="true"></span>
+        <span id="agree-text"></span>
+      </label>
+      <p class="agree-hint">内容を確認されたら、上の□にチェックを入れてください。</p>
+      <p class="err" id="read-err" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" class="btn ghost back" data-back>戻る</button>
+        <button type="button" class="btn primary" id="read-next">次の同意書へ</button>
+      </div>
+    </section>
+
+    <!-- 4. 署名 -->
+    <section class="step" id="step-sign" aria-labelledby="h-sign" hidden>
+      <h2 class="step-title" id="h-sign" tabindex="-1">署名してください</h2>
+      <p class="step-lead" id="sign-lead"></p>
+      <div class="card">
+        <p class="card-h" id="sum-h"></p>
+        <ul class="summary" id="sum-docs"></ul>
+        <dl class="facts" id="sum-facts"></dl>
+      </div>
+      <div id="sig-fields"></div>
+      <p class="sig-note">署名は、上の同意書すべての署名欄に記載されます。</p>
+      <p class="err" id="sign-err" role="alert" hidden></p>
+      <div class="actions">
+        <button type="button" class="btn ghost back" data-back>戻る</button>
+        <button type="button" class="btn primary" id="sign-submit">同意して送信する</button>
+      </div>
+    </section>
+
+    <!-- 5. 完了 -->
+    <section class="step" id="step-done" aria-labelledby="h-done" hidden>
+      <div class="done-head">
+        <svg class="stamp" id="stamp" viewBox="0 0 140 140" aria-hidden="true" hidden>
+          <defs>
+            <filter id="ink" x="-5%" y="-5%" width="110%" height="110%">
+              <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n"/>
+              <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.5 1.7" result="m"/>
+              <feComposite in="SourceGraphic" in2="m" operator="in"/>
+            </filter>
+          </defs>
+          <g filter="url(#ink)" fill="none" stroke="currentColor">
+            <circle cx="70" cy="70" r="64" stroke-width="5"/>
+            <path d="M12 52 H128 M12 88 H128" stroke-width="3"/>
+            <g fill="currentColor" stroke="none" font-family="Hiragino Mincho ProN,Yu Mincho,Noto Serif CJK JP,serif" font-weight="700" text-anchor="middle">
+              <text id="stamp-top" x="70" y="42" font-size="17"></text>
+              <text id="stamp-date" x="70" y="78" font-size="19"></text>
+              <text x="70" y="115" font-size="21">受付</text>
+            </g>
+          </g>
+        </svg>
+        <h2 class="done-title" id="h-done" tabindex="-1"></h2>
+        <p class="receipt" id="receipt" hidden></p>
+      </div>
+      <div id="done-notice"></div>
+      <div class="pdf-actions" id="pdf-actions">
+        <a class="btn primary" id="pdf-save" download>控えのPDFを保存する</a>
+        <button type="button" class="btn ghost" id="pdf-share" hidden>LINE・メールなどで保存・共有する</button>
+        <a class="btn ghost" id="pdf-open" target="_blank" rel="noopener">PDFを開いて確認する</a>
+      </div>
+      <p class="thumbs-cap" id="thumbs-cap"></p>
+      <div class="thumbs" id="thumbs"></div>
+      <div class="restart">
+        <button type="button" class="btn ghost" id="restart">最初の画面に戻る（入力内容を消去）</button>
+      </div>
+    </section>
+  </main>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<!-- 署名パッド -->
+<div class="pad" id="pad" role="dialog" aria-modal="true" aria-labelledby="pad-title" hidden>
+  <div class="pad-inner">
+    <div class="pad-head">
+      <p class="pad-title" id="pad-title"></p>
+      <p class="pad-hint">枠の中に、指でフルネームを書いてください。</p>
+    </div>
+    <div class="pad-area" id="pad-area">
+      <span class="base" aria-hidden="true"></span>
+      <span class="x" aria-hidden="true">×</span>
+      <span class="rot">スマートフォンを横向きにすると書きやすくなります</span>
+      <canvas id="pad-canvas" aria-label="署名を書く欄"></canvas>
+    </div>
+    <p class="pad-err" id="pad-err" role="alert"></p>
+    <div class="pad-actions">
+      <button type="button" class="btn ghost undo" data-pad="undo">1画もどす</button>
+      <button type="button" class="btn ghost clr" data-pad="clear">全部消す</button>
+      <button type="button" class="btn ghost cancel" data-pad="cancel">やめる</button>
+      <button type="button" class="btn primary ok" data-pad="ok">この署名で決定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 処理中 -->
+<div class="busy" id="busy" role="status" aria-live="assertive" hidden>
+  <div class="busy-box">
+    <div class="spin" aria-hidden="true"></div>
+    <p class="busy-text" id="busy-text"></p>
+    <p class="busy-sub" id="busy-sub">画面を閉じずにお待ちください。</p>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ==========================================================================
+   設定（ここだけ書き換えれば動きます）
+   ========================================================================== */
+var CONFIG = {
+  clinicName: '疋田歯科・泉矯正歯科',
+  stampName: '泉矯正歯科',          // 完了画面の受付印に入る名前（6文字以内が目安）
+  // Google Apps Script を「ウェブアプリ」として公開したURL（…/exec）を貼り付けます。
+  // 空欄のままだとテスト表示になり、医院への送信は行われません。
+  endpoint: '',
+  formKey: 'ck_red7kqvOLG74nn43Vdfmb0l4',            // Code.gs の FORM_KEY と同じ文字列（変更不要）
+  docVersion: '2026.11.03',          // 同意書の版。文面を変えたら更新してください
+  doctors: [],                       // 例：['疋田 ○○', '泉 ○○']。空なら歯科医師欄は空欄で出力（印刷後に記入）
+  guardianAge: 20,                   // この年齢未満の方は保護者の署名が必要
+  dateStyle: 'seireki',              // 'seireki' → 2026年11月2日 ／ 'wareki' → 令和8年11月2日
+  pdfDpi: 200                        // PDFの解像度（200で十分きれいに印刷できます）
+};
+
+/* 治療区分（大項目）と、それぞれで表示する同意書 */
+var PLANS = [
+  { id: 'adult-wire',     group: 'adult', label: '成人ワイヤー矯正',         desc: '歯の表側にブラケットとワイヤーをつける治療',     docs: ['general', 'adult', 'pledge'] },
+  { id: 'adult-aligner',  group: 'adult', label: '成人マウスピース矯正',     desc: '取り外しできる透明なマウスピースによる治療',     docs: ['general', 'adult', 'aligner', 'aligner-check', 'pledge'] },
+  { id: 'adult-lingual',  group: 'adult', label: '成人リンガル（裏側）矯正', desc: '歯の裏側に装置をつける治療',                     docs: ['general', 'adult', 'lingual', 'pledge'] },
+  { id: 'adult-half',     group: 'adult', label: '成人ハーフリンガル矯正',   desc: '上は歯の裏側、下は表側に装置をつける治療',       docs: ['general', 'adult', 'lingual', 'pledge'] },
+  { id: 'child-standard', group: 'child', label: '小児従来矯正',             desc: '床装置・ワイヤーなどによるお子さまの治療',       docs: ['general', 'pledge'] },
+  { id: 'child-aligner',  group: 'child', label: '小児マウスピース矯正',     desc: 'マウスピース型の装置によるお子さまの治療',       docs: ['general', 'aligner', 'aligner-check', 'pledge'] }
+];
+/* 追加の処置（必要な方のみ選択） */
+var OPTIONS = [
+  { id: 'exposure', label: '開窓／牽引',                         desc: '埋まっている歯（埋伏歯）を露出させ、引き出す処置',   docs: ['exposure'] },
+  { id: 'oas',      label: 'OAS（歯科矯正用アンカースクリュー）', desc: '顎の骨に小さなネジを固定し、歯を動かす支えにする方法', docs: ['oas'] }
+];
+/* 同意書を表示・PDF化する順番 */
+var DOC_ORDER = ['general', 'adult', 'lingual', 'aligner', 'aligner-check', 'exposure', 'oas', 'pledge'];
+
+/* ==========================================================================
+   同意書の文面（**太字**、__下線__、改行は \n）
+   ========================================================================== */
+var DOCUMENTS = {
+  "general": {
+    "title": "矯正歯科治療開始に関する同意書",
+    "subtitle": "（当院における治療規約および遵守事項）",
+    "blocks": [
+      ["lead", "矯正歯科治療を安全かつ円滑に進め、最善の治療結果を得るためには、患者様（および保護者様）のご理解と、当院の指示に対する厳格な遵守（コンプライアンス）が必要不可欠です。治療開始に際し、以下の基本規約および重要事項を必ずご確認ください。"],
+      ["h", "1. 通院と装置使用に関して"],
+      ["p", "矯正歯科治療は期間が長くかかり、その期間中は3、4週に一度ご来院いただく必要があります。また、治療内容により患者様に着脱をしていただく装置や器具の使用などの協力をお願いします。この指示に従っていただけないと治療期間が長引くばかりか良い治療結果が得られない場合もあります。担当医の指示に従い、治療を進めるようお願いいたします。"],
+      ["imp", "【重要：装置の特性と適応への努力、および装着時間規定】"],
+      ["p", "取り外し式の装置（レジン床装置など）の装着初期には、一時的な発音のしにくさ、喋りにくさ、口腔内の違和感等が生じますが、通常数日から数週間程度の適応への努力（日常的な装着）によって順応可能です。装置の使用時間は、基本的には「学校から帰ってきてから、就寝時（寝る時）を含めて毎日10〜12時間以上」を厳守してください。もし、睡眠中などに無意識のうちに装置が外れてしまっている場合は、目標の装着時間に達しないため、できるだけ日中の起きている時間帯に毎日追加で使用し、必要な装着時間を確実に確保してもらう必要があります。「学校生活で会話がしにくい」等の主観的理由により装着を怠る、または自己判断で装置を外して放置する行為は、治療の遅延や失敗を招く重大な用法違反となります。また、歯の移動や生え変わり、顎の成長に合わせて装置（レジン部分等）を削合・調整することは治療上必須の処置です。調整により一部が薄くなる場合がありますが、口腔内での正常な使用および正しい着脱に耐えうる強度は十分に確保されており、日常の適切な取り扱いにおいて、装置本体や金属ワイヤーが短期間に破断・破折することは物理的・材料工学的にありません。"],
+      ["h", "2. 歯磨きに関して"],
+      ["p", "矯正装置をお口の中にいれますと歯は汚れやすくなります。来院時に装置に合わせた歯ブラシや、デンタルフロス等の清掃用具の使用方法を指導させて頂きますが、虫歯の予防はご自宅でのブラッシングが最も重要です。治療開始に際して歯磨きに関する自己管理の重要性をご理解ください。"],
+      ["h", "3. X線写真撮影に関して"],
+      ["p", "治療途中には定期的にX線写真撮影を行わせて頂きます。これは治療の進行度合いやその効果、上下顎骨の成長・発育の状態、歯及び顎の骨への影響を確認するために必要な検査です。治療を進めるにあたって必要な検査であることをご理解ください。"],
+      ["h", "4. 抜歯に関して"],
+      ["p", "矯正歯科治療を行うにあたり、歯と顎の大きさに不調和が認められ、顎に歯が並びきらない場合、永久歯を抜くことがあります。これは調和のとれた噛み合わせを得るために必要と判断される場合です。治療を始めるにあたり、抜歯の必要性や可能性をどうぞご理解ください。"],
+      ["h", "5. 成長・発育に関して"],
+      ["p", "顎や歯あるいは全身の成長、発育の状態などにより将来、永久歯の抜歯や補綴治療、外科的治療を治療計画に併用させて頂くことがあります。治療計画の変更に関しても担当医とよくご相談いただきご理解いただけますようお願いいたします。"],
+      ["h", "6. 偶発症に関して"],
+      ["p", "矯正歯科治療を行うにあたり、最初の精密検査で予測できないことがあります。例えば、骨の中に埋まっている歯や過去にぶつけたことのある歯は移動させる力をかけても動かない場合や、治療中に歯根が短くなってしまうことがあります。このような場合、その程度や本数によっては治療計画の変更もしくは治療を中止せざるを得ない場合もあります。"],
+      ["h", "7. 治療終了・保定に関して"],
+      ["p", "矯正歯科治療は歯がきれいに並び、矯正装置が除去された時が終了ではありません。動的治療（歯を動かす治療）終了後の歯並びを維持し安定させるためには、保定装置を装着する保定治療が必要です。保定装置を正しく使用しないと、歯並びが乱れ、その乱れがひどい場合には再度装置をつけて矯正歯科治療を行う必要があります。その際には、下記のように別途料金がかかりますのでご了承ください。保定治療中の通院間隔は3か月～半年に1回を2年間程度となりますので、保定治療の必要性をご理解いただき、担当医の指示に従ってください。"],
+      ["h", "8. 矯正料金・各種別途費用、および装置の破損・紛失に関する規定"],
+      ["p", "矯正基本料金には動的治療と保定治療の技術費用が含まれています。矯正基本料金は原則として治療開始時の一括払い（または指定の方法）となります。ほかに、治療のために必要となる以下の費用は、矯正基本料金には含まれず、来院ごとに別途支払いが必要となりますのでご了承ください。"],
+      ["imp", "【重要：基本料金に含まれない別途費用】"],
+      ["item", "①", "**動的治療期間中の毎回の「処置料（調整料）」**"],
+      ["item", "②", "**動的治療終了後の保定治療期間における毎回の「保定観察料」**"],
+      ["p", "なお、抜歯・虫歯などの治療に必要な料金、および自費による矯正歯科治療で必要となる抜歯や開窓などの治療費は、原則として別料金（自費）となります。"],
+      ["imp", "【装置の破損・紛失時における費用負担と相殺（清算）条項】"],
+      ["p", "治療期間中に、患者様側の不適切な取り扱い、または管理不足（落下、踏みつけ、ケースに保管しないことによる破損・紛失、正しくない噛み込み装着、睡眠中や無意識下を問わず自ら装置を外して投げる・放置する行為等、通常使用の範囲を著しく逸脱する外力が加わったことによるもの）によって装置が破損または紛失した場合、装置の再作製にかかる実費（技工料および材料費）は、原則として患者様（保護者様）の全額実費負担（有償対応）となります。"],
+      ["p", "初期の破損等に対して、当院が治療の円滑な進行を目的として善意で無償対応（費用肩代わり）を行った経緯がある場合でも、その後患者様都合により治療を中途解約・中止される際の最終清算においては、当院が過去に無償対応（免除）した装置再作製費用の実費総額を、本来の返還対象額（基本料金の進行度割分）から「原状回復費用」として相殺・差し引いて清算いたします。"],
+      ["h", "9. 長期未来院および再治療に関して"],
+      ["p", "定期的な来院頻度（原則3,4週に一度）を守っていただけず、最終来院日から2年以上ご連絡もなく未来院が続いた場合、治療を再開するにあたっては、再度、精密検査が必要となり、歯並びやお口の中の状況の変化に応じて、治療方針が変更となる場合があります。治療を再開する場合には、新たに精密検査料、矯正基本料金が必要となりますのでご了承ください。"],
+      ["p", "また、保定治療期間中、定期的に通院しないことや、保定装置を装着されないことが原因により再治療が必要となる場合や、保定治療の終了後に再治療を行う場合には、原則、新たに矯正基本料金と矯正処置料が必要となりますのでご了承ください。"]
+    ],
+    "consent": "上記を含め、矯正歯科治療についての重要規約および説明を受け、内容を十分に理解・同意いたしました。",
+    "labels": {"patient": "患者氏名", "guardian": "代諾者氏名（続柄）", "doctor": "歯科医師氏名"}
+  },
+  "adult": {
+    "title": "成人矯正歯科治療追加同意書",
+    "blocks": [
+      ["h", "1.歯周病に関して"],
+      ["p", "成人の多くは歯周病に罹患しているといわれています。歯周組織に炎症が存在したまま矯正歯科治療を開始すると、歯周病をさらに進行させてしまいます。そこで、治療開始前に、歯周病の検査を行い、その病状を把握し、必要があれば、歯周病の治療をしていただきます。歯周病の治療には数年を要することもありますが、歯周病の管理が行えていない状況では矯正歯科治療を開始できませんのでご理解ください。"],
+      ["p", "また、矯正歯科治療と並行して、歯周病の治療や管理が必要なこともありますので、ご理解ください。"],
+      ["h", "2.歯槽骨の吸収について"],
+      ["p", "矯正治療による歯の移動は歯槽骨の吸収と添加によっておこります。歯周病による炎症が存在すると、歯の移動時に骨の吸収が著しく進行してしまい、歯周病が悪化する場合があります。そのためにも歯周治療は重要です。口腔内の衛生管理の意義と必要性をご理解ください。"],
+      ["h", "3.歯の動揺について"],
+      ["p", "健康な歯周組織の状態であっても、矯正歯科治療中に歯は動揺します。歯周病に罹患し、矯正歯科治療開始時に既に動揺がある場合には、矯正歯科治療中に著しく動揺することがあります。動揺は治療終了後、徐々に軽減しますが、術後長期にわたり（生涯を通して）固定が必要なこともあります。"],
+      ["h", "4.矯正歯科治療中または治療後の歯間部の隙間（ブラックトライアングル）について"],
+      ["p", "歯肉は歯槽骨（歯を支える骨）の上に付着しています。不正咬合を有する方は、歯並びの悪さから、歯槽骨が薄く骨の高さが低下していたり、歯肉に炎症による腫れがよくみられたりします。矯正治療によって歯並びが整い歯肉の腫れが改善すると、治療前の歯槽骨の高さに合わせて歯肉が引き締まり、その結果、歯間部の歯肉が下がったように見えることがあります。この隙間は、歯周病の治療後にも見られる現象でこれを防ぐことはなかなか難しいとされています。しかし、矯正治療により、お口の自浄作用が高まり、口腔清掃が容易になることは将来の歯周病の予防につながります。"],
+      ["h", "5.知覚過敏について"],
+      ["p", "矯正歯科治療中に知覚過敏の症状が生じることがあります。多くの場合は一時的で数日で症状が消失します。しかし、繰り返し症状が生じたりすることもあり、知覚過敏の処置が必要な事があります。また、重篤な場合は歯髄（歯の神経）の処置が必要なこともあります。"],
+      ["h", "6.エナメルクラックについて"],
+      ["p", "エナメルクラックとは、エナメル質に見られる細かなひび割れ・亀裂のことです。これは、歯ぎしりや食いしばりなどが原因で生じるといわれていますが、矯正歯科治療が終了し、装置（マルチブラケット装置）を除去する際にエナメルクラックが入る事があります。日常生活において問題になる事は少ないのですが、着色や知覚過敏がおこることがあります。"]
+    ],
+    "consent": "上記を含め、成人矯正歯科治療について十分な説明を受け、内容を十分理解しました。",
+    "labels": {"patient": "患者氏名", "guardian": "代諾者（続柄）", "doctor": "歯科医師氏名"}
+  },
+  "lingual": {
+    "title": "舌側矯正歯科治療開始に関する追加同意書",
+    "blocks": [
+      ["h", "1.舌側からの矯正治療について"],
+      ["p", "舌側矯正治療では歯の裏側に矯正装置を装着して治療を行います。しかし、奥歯に装置を固定するための金具や歯を動かす力を調整するためのゴムおよびゴムを掛けるためのフックなどを歯の表側にも装着する場合があります。できるだけ審美性を損なわないよう配慮はいたしますが、治療を円滑に進めるために必要なものであることをどうぞご理解ください。"],
+      ["h", "2.舌の痛みに関して"],
+      ["p", "歯の表側からの矯正歯科治療と違い、歯の内側に装置を装着するため、舌の違和感が強く現れます。舌への刺激は通常一時的なもので治療の進行に伴い徐々に緩和します。できるだけ不快感を少なく過ごすためのアドバイスをいたしますが、どの矯正装置でも慣れるまでに時間がかかることをどうぞご理解ください。"],
+      ["h", "3.発音障害に関して"],
+      ["p", "治療開始からおよそ2〜4週間は発音に障害を生じることがありますので、治療の始めには話し方の練習が必要となります。装置への慣れには個人差がありますが、装置を装着してからの数日間はスケジュールなどを調整して新しい装置に慣れるまでの時間を作っていただくようお願いいたします。"],
+      ["h", "4.咀嚼障害に関して"],
+      ["p", "装置装着からおよそ4〜12週間は前歯しか咬み合わず、奥歯で上手く咬めないことがありますので、柔らかいものを食べることや小さく切り分けたりするなど、食事の取り方に工夫が必要になります。また、装置を装着した後、装置が外れたり変形したりする原因となる硬いもの、粘着性のある食べ物は避けるようお願いいたします。"],
+      ["h", "5.歯周疾患に関して"],
+      ["p", "歯の裏側に装着された装置を直接見ながら歯磨きができないため、歯磨きがしづらくなります。清掃不良になると歯ぐきが腫れたり、やせたりするといった歯周疾患になることがあり、その程度によっては治療計画の変更もしくは治療を中止せざるを得ない場合もあります。治療を成功させるためにも歯、歯ぐき、装置を清潔に保つためブラッシング指導をいたしますが、歯磨きに関する自己管理の重要性をどうぞご理解ください。"],
+      ["h", "6.舌側矯正治療の料金に関して"],
+      ["p", "舌側矯正治療の料金に関しては「矯正歯科治療開始に関する同意書」の矯正料金の項に準じます。しかし、患者様自身の希望による矯正装置の変更に対しては、原則として舌側矯正治療の料金の返金には応じられませんのでご了承ください。"]
+    ],
+    "consent": "上記を含め、舌側矯正歯科治療について十分な説明を受け、内容を十分理解しました。",
+    "labels": {"patient": "患者氏名", "guardian": "代諾者（続柄）", "doctor": "歯科医師氏名"}
+  },
+  "aligner": {
+    "title": "アライナー矯正治療に関する説明文書および同意書",
+    "blocks": [
+      ["sec", "説明文書"],
+      ["lead", "アライナー（マウスピース型）矯正治療（Smartee/angel aligner/invisalign/clearcorrect/suresmileなどの製品による矯正治療）を受けることにより、歯周組織の改善につながる可能性がある一方で、矯正治療には限界があり、また、合併症の危険性（下記参照）を伴うということを、矯正治療に同意していただく前に十分に検討していただく必要があります。"],
+      ["h", "装置の特性"],
+      ["p", "アライナー矯正治療は着脱可能で、目立たない、医療用熱可塑性樹脂で作製されるアライナーという矯正装置を用いた矯正システムです。段階的にアライナーを装着していくことによって、少しずつ歯の位置が動いていくようにデザインされています。"],
+      ["p", "歯科医師の診察と処方を３次元治療計画ソフトウェアと組み合わせることにより、望まれる歯の移動方法を示す治療計画が策定されます。治療計画が歯科医師によって承認されたのち、それぞれの患者様の治療内容に即したアライナーの製造が開始されます。"],
+      ["h", "治療過程"],
+      ["p", "患者様はX線写真や写真撮影を含む、通常の矯正治療と同様の検査および診断を受けます。歯科医師は患者様の歯の印象（形）を採得し、治療計画書とともにアライナー製造会社へ送付します。アライナー各社の技術者は歯科医から提出された治療計画書の内容に従い、ソフトウェア上にて治療モデルを作成します。ソフトウェア上の治療計画を反映したアライナーを３Dプリンタなどにより製造し、歯科医師に送付します。"],
+      ["p", "治療に必要なアライナーの数は、歯科医師の治療計画内容によって異なります。アライナーには個々に番号がつけられ、使用上の説明とともに歯科医師または担当スタッフにより患者様に手渡されます。"],
+      ["p", "歯科医師から別途特別な指示がない限り、患者様は食事、ブラッシングやフロス時以外、１日20〜22時間以上を目安に装着することが推奨されます。歯科医師からの装着時間、装着日数、使用時間の指示に従い、次のアライナーに切り替えていきます。治療に要する期間は歯科医師の治療計画内容によって異なりますが、歯科医師より別途特別な指示がない限り、最低でも4-6週間ごとに受診をされることが望ましいです。場合によっては、歯の移動を促進させるため、治療中に歯にアタッチメントを接着すること、もしくはエラスティックを装着することが必要となる可能性もあり審美性に影響する場合があります。また、患者様によっては、当初の一連のアライナーの装着に加えて、さらに仕上げのために追加アライナーの装着を要する場合もあります。"],
+      ["h", "治療の限界と考えられる合併症"],
+      ["p", "他の矯正治療装置と同じく、アライナー矯正装置の使用には次のような限界があり、また、合併症が考えられます。"],
+      ["item", "1)", "1日当りの所定の製品装着時間が守られない場合、製品が担当医師の指示通りに使用されない場合、アポイントメントが守られない場合、もしくは特殊な形状の歯が存在する場合については、治療期間が長期化する可能性があり、望まれる治療結果の実現性に影響を与える場合があります。"],
+      ["item", "2)", "次のステージのアライナーに交換した後に、歯の圧痛を経験する場合があります。"],
+      ["item", "3)", "歯肉、頬及び唇に、製品による擦り傷または痛みが生じる場合があります。"],
+      ["item", "4)", "治療完了後に歯の位置が移動する場合がありますが、治療終了時に保定装置を忠実に装着することにより、その傾向を減じる一助となります。"],
+      ["item", "5)", "患者様が糖分を含有する食品または飲料を消費し、製品の装着前に適切に歯磨およびフロスを行わなかった場合、もしくは適切な口腔衛生上および歯科疾患予防上の管理を怠った場合には、虫歯、歯周病、歯肉炎もしくは脱灰等が生じる場合があります。"],
+      ["item", "6)", "製品は一時的に発音に影響を与える場合があり、結果として舌のもつれを生ずる場合がありますが、製品に関連した発話障害は、通常 1 週間から 2 週間以内に軽減します。"],
+      ["item", "7)", "アライナーの使用により、一時的な唾液分泌の増加または口の渇きを生ずる場合があり、また特定の医薬品によってその効果が増大する場合があります。"],
+      ["item", "8)", "治療の過程で、歯牙移動を促進させるため、もしくはアライナーを維持するために、一時的に一歯または複数の歯にアタッチメントを接着する場合があります。これらのアタッチメントはすべて、治療終了後に歯科医師が除去する必要があります。"],
+      ["item", "9)", "アタッチメントは脱離することがあり、再設置が必要となる場合があります。"],
+      ["item", "10)", "歯の移動を可能とするための空隙を創り出すため、歯の削合が必要となる場合があります。"],
+      ["item", "11)", "咬合状態が治療過程全体を通して変化する場合があり、結果として患者様に一時的な不快感を与える可能性があります。"],
+      ["item", "12)", "稀に、患者様が歯ぎしりをしていた場合や咬耗が生じていた場合、アライナーの表面にわずかな摩耗が生じることがありますが、通常、全体的なアライナーの性能および強度が損なわれることはないため、問題ありません。"],
+      ["item", "13)", "矯正治療の最終段階で、咬合調整が必要となる場合があります。"],
+      ["item", "14)", "歯牙が特殊な形状をしている場合や、萌出中または欠損している場合、アライナーの適合性および希望通りの治療結果の達成に影響を与える場合があります。"],
+      ["item", "15)", "重度のオープンバイト、重度のオーバージェット、混合歯列および／または骨格性狭窄歯列の治療は、アライナー治療に加え、補助的な治療が必要な場合があります。"],
+      ["item", "16)", "アライナー単独では、希望する治療結果が実現しにくいと思われるような複雑な治療計画の場合、歯に接着するボタン、エラスティック、補助的な装置および歯科用機器（一時的なアンカレッジ装置、アンカースクリュー、部分的な固定装置など）の使用を含む補助的な矯正治療、もしくは補綴処置が必要とされる可能性があります。"],
+      ["item", "17)", "長期間にわたって重なっていた歯は、歯間接触下部の歯肉組織が失われている場合があり、歯列矯正を行うことで、「ブラックトライアングル」が発生する可能性があります。"],
+      ["item", "18)", "アライナーは、歯科用インプラントの移動に有効ではありません。"],
+      ["item", "19)", "全体的な健康状態および医薬品の服用が、歯列矯正治療に影響を与える場合があります。"],
+      ["item", "20)", "歯を支える骨および歯肉の健康状態に影響を与える場合があります。"],
+      ["item", "21)", "重度な叢生または顎の不均衡を改善するために、アライナー製品を装着するに先立って、口腔外科手術が必要となる場合があります。当該手術が必要な場合、麻酔および適切な治癒に関連するリスクを治療前に考慮する必要があります。"],
+      ["item", "22)", "稀に、歯の寿命を縮める場合があり、歯内治療もしくは追加的な補綴修復処置等の追加的な歯科治療が必要となる可能性、および、歯が失われる可能性があります。 また、過去に歯の損傷があった場合、または大規模な補綴修復処置がなされていた場合、さらに悪化する可能性があります。"],
+      ["item", "23)", "既存の補綴修復(クラウン等)は、外れてしまうか、もしくは緩んでしまう場合があり、再接着、または、場合によっては交換が必要となる場合があります。"],
+      ["item", "24)", "臨床歯冠が短い場合、製品を固定させる上で問題となり、歯の移動が阻害される場合があります。"],
+      ["item", "25)", "矯正治療中、歯根の長さが短くなる場合があり、歯の寿命が短くなる可能性があります。"],
+      ["item", "26)", "叢生の程度が重度の場合、もしくは欠損した歯が複数存在する場合、製品破損の可能性が高くなります。"],
+      ["item", "27)", "矯正装置またはそのパーツについては、偶然に飲み込んだり吸引してしまう可能性があり、そのリスクは、歯科医師がアライナーを一部切除したり改造した場合に増大します。"],
+      ["item", "28)", "稀に、顎関節に問題が生じる場合があり、それによって関節痛、頭痛または耳の障害が生じる場合があります。"],
+      ["item", "29)", "稀に、アレルギー反応が発現する場合があります。"],
+      ["item", "30)", "すべての歯が少なくとも部分的にアライナーで覆われていない場合、過剰萌出する可能性があります。"],
+      ["item", "31)", "稀に、遺伝性疾患である遺伝性血管性浮腫（HAE）の患者様の場合、喉頭など、特定の皮下組織に浮腫の急性発作が起こる場合があります。HAE発作は、歯科処置等の弱い刺激が誘因となる可能性があります。"],
+      ["h", "個人情報の取り扱い"],
+      ["p", "当院では、矯正治療に伴い、氏名、性別、年齢、住所、X 線写真、口腔内写真等の治療記録を含む診察記録などの患者様の個人情報（以下「患者個人情報」といいます。）を取得します。当院では、以下の利用目的で患者個人情報を使用し、個人情報の保護に関する法律等の法令に従い適切に管理します。"],
+      ["item", "1)", "アライナーを使用した矯正治療の提供のために利用すること"],
+      ["item", "2)", "アライナーを使用した矯正治療に必要となる、治療履歴の分析・再考等の目的において、他の歯科医、矯正医、または歯科もしくは矯正医の属する団体、アライナー製造メーカーおよびそのグループ会社（海外のグループ会社を含みます。）に提供すること"],
+      ["item", "3)", "教育もしくは研究開発目的に使用すること"],
+      ["p", "当院は、法令に基づく場合のほか、アライナーを用いた矯正治療の提供のために、上記 2)のとおり、取得した患者個人情報を第三者に提供することがあります。"],
+      ["sec", "同意書", "break"],
+      ["p", "私はアライナーを使用した矯正治療に関する資料を読み、治療に伴う利点、治療の限界及び合併症の危険性を理解しました。私の治療を行う歯科医より、アライナーを用いた矯正治療について十分な説明を受け、質問や話し合いを十分に行うことができました。私はアライナー矯正装置を担当歯科医師からの診断・処方を受けた上でのみ使用すべきであることを理解し、矯正治療を受けることに同意します。"],
+      ["p", "アライナー製造メーカーは医療・歯科・ヘルスケアサービス業者ではないため、医療行為、歯科治療行為、医療アドバイスを行うことはないと理解します。また、歯科医師、製造メーカー及びその社員は私の治療結果を保証するものではないと理解します。"],
+      ["p", "私は歯科医師に、X 線写真や患者写真等の治療記録を含む診察記録その他の矯正治療のために必要となる私の個人情報を提供し、その管理を委ねること、及び、それらの記録が："],
+      ["item", "1)", "アライナーを使用した私の矯正治療のために使用されること"],
+      ["item", "2)", "アライナーを使用した私の矯正治療に必要となる、治療履歴の分析・再考等の目的において、他の歯科医、矯正医、または歯科もしくは矯正医の属する団体、アライナー製造メーカーおよびそのグループ会社（海外のグループ会社を含みます。）に提供されること"],
+      ["item", "3)", "教育もしくは研究開発目的に使用されることに、同意します。"],
+      ["p", "私は上記の開示に同意します。私は上記の開示を理由に、私もしくは代理人等を介し、法的、金銭的な賠償請求を行うことはありません。私は治療履歴が利用されることによる報酬は発生しないものとみなし、この「アライナー矯正治療に関する説明文書および同意書」に定められた規定内の利用については、私もしくは代理人等による代償もしくは法的、金銭的な賠償請求を行うことはありません。"],
+      ["p", "この「アライナー矯正治療に関する説明文書および同意書」の複写はオリジナルとみなされ、原本と同じ効力を持つものとします。"]
+    ],
+    "consent": "私はこの「アライナー矯正治療に関する説明文書および同意書」の内容を熟読し、理解、同意する旨、下記署名の通りここに認めます。",
+    "labels": {"date": "日付", "patient": "署名（氏名）", "guardian": "保護者署名", "doctor": "説明医師", "address": "住所"},
+    "guardianNote": "署名者が２０歳未満の場合、保護者の署名が必要となります。"
+  },
+  "aligner-check": {
+    "title": "確認書",
+    "subtitle": "（アライナー矯正治療）",
+    "listTitle": "確認書（アライナー矯正治療）",
+    "blocks": [
+      ["lead", "アライナー矯正治療の特性、限界または合併症の説明を受け確認し、理解しました。"],
+      ["item", "・", "アライナー矯正治療に関する費用の内訳は別途見積書記載による内容で確認しました。"],
+      ["item", "・", "アライナー矯正装置代、検査料、診断料、装置設計料に関しては、装置の納品または検査、診断、装置設計の実施後はいかなる理由があっても返金対象にならないことを理解しました。"],
+      ["item", "・", "マウスピース発注後に患者さまの都合によるキャンセルの場合、__契約料金の３分の2を違約金__としてお支払いいただきます。（※発注後に技工料が発生しているため）"],
+      ["item", "・", "アライナー矯正治療の装置の有効期間の説明を受け、理解しました。"],
+      ["item", "・", "患者様の都合(未来院等)でアライナー矯正治療の装置の__有効期間__（一般的にマウスピース矯正開始から__５年__契約）を過ぎた場合、別途装置代がかかることを説明を受け理解しました。"],
+      ["item", "・", "治療途中に患者様から、治療計画の変更の依頼があった場合は別途 診断料、設計料、検査料が発生することがあることを理解しました。例：「当初は非抜歯で治療したかったが、途中で歯を抜きたくなった」など。"],
+      ["item", "・", "アライナー矯正治療は、矯正治療を担当する歯科医師、治療を補助または急患対応をするアシスタント歯科医師、歯科衛生士、歯科助手、カウンセラー、受付によるチーム医療で患者様の矯正治療をサポートします。"],
+      ["item", "・", "来院時に担当歯科医師不在の場合にはアシスタント歯科医師または他スタッフにて対応することがあります。"],
+      ["item", "・", "装置の使用説明、メンテナンス、写真撮影などの資料採得は主に歯科医師以外のスタッフが行うことがあります。"],
+      ["item", "・", "アタッチメント脱着は歯科衛生士が行うことがあります。"],
+      ["item", "・", "診断、治療計画立案、設計、IPR/ディスキングは歯科医師が行います。"],
+      ["item", "・", "X線写真撮影の設定や補助はスタッフが行うことがあります。"],
+      ["item", "・", "担当歯科医師からの治療計画変更に関しては、診断料、設計料、検査料は発生しないことがあります"],
+      ["item", "・", "アライナー矯正装置の装着が22時間を切った場合、予定していた治療期間の予期せぬ延長の原因は患者様にあるということを理解しました。"],
+      ["item", "・", "アライナーチューイーを適切に使わなかった場合、予定していた治療期間の予期せぬ延長の原因は患者様にあるということを理解しました。"],
+      ["item", "・", "担当歯科医師より指示のあった顎間ゴムを適切に使わなかった場合、予定していた治療期間の予期せぬ延長の原因は患者様にあるということを理解しました。"],
+      ["item", "・", "担当歯科医師より指示のあった顎間ゴムを適切に使わなかった場合、歯肉の退縮、歯槽骨の破壊/吸収が起きることがあり、患者さんの責任であるということを理解しました。"],
+      ["item", "・", "「口元を下げたい」というご希望には応えられないことがあります。"],
+      ["item", "・", "「口元を下げたい」というご希望ある場合、抜歯やＩＰＲ/ディスキングが必要になる場合があります。"],
+      ["item", "・", "「口元を下げたい」というご希望には、顎骨の限界を超えて歯を動かすことはできません。"],
+      ["item", "・", "「口元を下げたい」というご希望には、治療前にご希望の下げる目安をお伝えいただき、「できるだけ」や「なるべく」などの曖昧な表現では診断ができない場合があります。"],
+      ["item", "・", "「口元を下げたい」というご希望には、顎骨の限界があることを理解し、顎骨の範囲を超えて下げたい場合は外科処置が必要になるということを理解しました。"],
+      ["item", "・", "かみ合わせを優先する場合、上下の歯の正中線（真ん中）は必ずしも一致しないことがあります。"],
+      ["item", "・", "上下の歯の正中線（真ん中）は頭蓋骨、または顔貌写真に対して左右２ミリ程度は許容することとします。"],
+      ["item", "・", "治療途中で当初予定していなかった抜歯やＩＰＲ/ディスキングが行われる可能性があります。"],
+      ["item", "・", "治療途中で当初予定をしていなかった補助装置（ワイヤーやアンカースクリュー、ミニインプラントなど）を使うことがあります。"],
+      ["item", "・", "治療途中に顎関節症が生じることがあります。"],
+      ["item", "・", "治療途中に歯肉退縮が起きることがあります"],
+      ["item", "・", "治療途中に動かない歯が発覚することがあります。"],
+      ["item", "・", "治療途中に齲蝕や歯周病が見つかることがあります。"],
+      ["item", "・", "埋伏歯の牽引にはきちんと歯が生えてこないこと、所定の位置まで歯を動かせないこと、歯根吸収により牽引していた歯を抜歯する可能性があることを理解しました。"]
+    ],
+    "consent": "以上のことを理解し、治療に同意することにしました。",
+    "labels": {"date": "日付", "patient": "署名（氏名）", "guardian": "保護者署名", "doctor": "説明医師"}
+  },
+  "exposure": {
+    "title": "埋伏歯の開窓・牽引に関する同意書",
+    "showPatientHeader": true,
+    "blocks": [
+      ["lead", "当院では、下記のとおり「埋伏歯の開窓・牽引」処置を予定しております。処置の目的・内容・リスクについて十分にご説明し、ご理解・ご納得いただいた上で、同意をお願い申し上げます。"],
+      ["h", "【1. 処置の目的】"],
+      ["p", "埋伏している永久歯（主に犬歯や小臼歯など）を適切な位置に導くため、歯肉や骨を開窓し、装置によって牽引する処置を行います。これは歯列・咬合の正常化と審美性の改善を目的とします。"],
+      ["h", "【2. 処置内容】"],
+      ["item", "1.", "事前に歯科用CTやレントゲンX線写真撮影を行い、診断を行います。"],
+      ["item", "2.", "局所麻酔を行った上で、歯肉および必要に応じて骨の一部を除去し、埋伏歯を露出させます（開窓術）。"],
+      ["item", "3.", "露出した歯面に牽引用の装置（ボタン等）を接着します。"],
+      ["item", "4.", "矯正装置と連結し、適切な力で牽引を開始します。"],
+      ["item", "5.", "処置後は定期的な調整と管理が必要です。"],
+      ["h", "【3. 予想されるリスク・合併症】"],
+      ["item", "・", "出血、腫脹、疼痛、一時的な開口障害"],
+      ["item", "・", "感染（必要に応じて抗菌薬を処方）"],
+      ["item", "・", "骨性癒着（アンキローシス）等による牽引が困難な場合は再度の処置、あるいは中止の可能性あり"],
+      ["item", "・", "隣接歯への影響（歯根吸収・歯列不整など）"],
+      ["item", "・", "装置の脱離・破損"],
+      ["item", "・", "処置に伴う一時的な知覚鈍麻や違和感"],
+      ["h", "【4. その他】"],
+      ["item", "・", "本処置は矯正治療の一環であり、矯正装置による長期的な管理が前提となります。"],
+      ["item", "・", "痛みや腫れが強い場合には、適切な対症療法を行いますので、早めにご相談ください。"],
+      ["item", "・", "本同意は任意であり、ご不明点は遠慮なくご質問ください。"]
+    ],
+    "consentHeading": "【同意確認】",
+    "consent": "上記内容について、説明を受け、理解し、納得した上で処置を受けることに同意します。\nまた、処置後の通院・指示事項を守ることに同意します。",
+    "labels": {"patient": "患者氏名（署名）", "guardian": "保護者氏名（署名）", "doctor": "担当医名"}
+  },
+  "oas": {
+    "title": "歯科矯正用アンカースクリューを用いた治療開始に関する追加同意書",
+    "blocks": [
+      ["h", "1.歯科矯正用アンカースクリューを用いた治療について"],
+      ["p", "矯正治療をできるだけ短期間で良好に終了するためには治療中における患者さんの協力が不可欠です。特にヘッドギアーという装置は1日10〜12時間の装着を長期間（通常1年～2年）行う必要があり、この装置の使用を前提に治療計画を立てます。協力が得られない場合、治療が長引いたり、予定の治療結果が得られなかったりします。"],
+      ["p", "しかし、この装置を毎日継続して装着することは患者さんへの負担が大きいため、その負担をなるべく減らし、目標とする治療結果に到達する治療法の開発が行われるようになりました。その治療方法は、患者さんの顎の骨に小さなネジ（歯科矯正用アンカースクリュー）をネジ止めし、歯を移動する際にその固定力を利用し、ヘッドギアーの代わりとする治療法です。この治療によって、患者さんがより快適に、またより高い治療結果を得ることが可能となります。"],
+      ["h", "2.植立予定部位の検査について"],
+      ["p", "植立予定部位については、模型、レントゲン写真、CTなどによる検査が必要となります。これは、歯科矯正用アンカースクリュー植立に必要な骨の厚み、正確な植立位置の決定のために必要な検査です。治療を進めるにあたって必要な検査であることをご理解ください。"],
+      ["h", "3.この治療法の予想される効果と起こるかもしれない副作用について"],
+      ["p", "従来の治療法では、特にヘッドギアーが必要な場合、毎日10〜12時間の装着が1〜2年必要でしたが、本治療法によって、患者さんの協力が必要となる装置が不必要になると考えられます。また、より高い治療目標に到達することが可能となるとともに矯正治療の期間を短縮できる可能性があります。さらに現在までの矯正治療では困難であった大臼歯の圧下という治療が可能となってより高い治療目標の到達が可能になるものと予想されます。"],
+      ["p", "起こるかもしれない副作用としては、骨に直径1〜2mm、深さ4〜8mmの穴をあける必要があります。その際歯根を傷つけたり、歯科矯正用アンカースクリューが骨の中で破折したりする可能性があります。また、治療途中においては感染の可能性や、動揺・脱落の可能性があります。植立後の痛みについては、必要に応じて痛み止めや抗生物質の投薬を行います。"],
+      ["h", "4.歯科矯正用アンカースクリュー使用中断（除去）の場合の対処方法について"],
+      ["p", "動揺・脱落は治療終了までの間に約5〜15％認められています。動揺・脱落等がおこった場合は、歯科矯正用アンカースクリューの除去や再植立などを行います。また感染がおこった場合は、洗浄や抗生物質の投薬など適切な対応を行います。"],
+      ["h", "5.歯科矯正用アンカースクリュー撤去について"],
+      ["p", "矯正治療が進行し、装置の必要性がなくなった場合には装置撤去を行います。撤去は比較的容易に行うことができますが、必要に応じて痛み止めや抗生物質の投薬を行います。"],
+      ["h", "6.歯科矯正用アンカースクリューを用いた治療の料金に関して"],
+      ["p", "歯科矯正用アンカースクリューの植立料金は、基本料金には含まれておりません。治療開始時に別途お支払いください。（保険は除く）投薬料については植立料金に含まれておりません。処置時に別途お支払ください。"],
+      ["p", "また脱落し再植立の場合、必要に応じて別途必要となります。詳細については担当医・主治医にお尋ねください。"]
+    ],
+    "consent": "上記を含め、歯科矯正用アンカースクリュー植立について十分な説明を受け、内容を十分理解しました。",
+    "labels": {"patient": "患者氏名", "guardian": "代諾者（続柄）", "doctor": "歯科医師氏名"}
+  },
+  "pledge": {
+    "title": "矯正基本料金　支払誓約書",
+    "layout": "pledge",
+    "statement": "私は、貴院における矯正治療について、以下の内容を十分に理解・同意の上、基本矯正料の支払いを誓約いたします。",
+    "blocks": [
+      ["center", "記"],
+      ["h", "第1条（治療開始の定義および契約成立時期）"],
+      ["item", "1．", "本矯正治療における「治療開始」とは、**検査・診断・治療計画立案・装置設計・発注等、いずれかの工程に着手した時点**を指し、装置装着の有無を問いません。"],
+      ["item", "2．", "患者（および保護者）は、治療開始時点をもって**矯正治療契約が正式に成立**することを確認し、これに同意するものとします。"],
+      ["h", "第2条（途中解約に関する基本原則）"],
+      ["item", "1．", "治療開始後に患者都合（転居、進学、就職、妊娠、仕事・学業多忙、通院困難、家族の反対等を含むがこれらに限らない）により治療を中止・解約する場合、**既に実施された治療行為および準備工程に対する費用は返金の対象外**とします。"],
+      ["item", "2．", "以下の理由は、**返金または減額の正当な理由とはなりません。**"],
+      ["item", "・", "「思っていたより時間がかかる」", 2],
+      ["item", "・", "「見た目の変化が少ない／まだ綺麗になっていない」", 2],
+      ["item", "・", "「他院の説明と違うと言われた」", 2],
+      ["item", "・", "「SNSやインターネットで別の情報を見た」", 2],
+      ["item", "・", "「家族・知人から反対された」", 2],
+      ["item", "・", "「他院の方が安いと後から知った」", 2],
+      ["h", "第3条（返金対象外費用の明確化）"],
+      ["p", "治療開始後、以下の費用については**理由の如何を問わず返金の対象とはなりません。**"],
+      ["item", "・", "初診カウンセリング、検査、診断、資料採得", 2],
+      ["item", "・", "治療計画立案および説明に要した医療行為", 2],
+      ["item", "・", "矯正装置の設計、発注、製作、管理費用", 2],
+      ["item", "・", "既に装着・使用・調整された装置・材料", 2],
+      ["item", "・", "治療管理料、調整料、技術料", 2],
+      ["item", "・", "治療の進行に伴い発生した医療スタッフの人的コスト", 2],
+      ["h", "第4条（返金算定の裁量および限界）"],
+      ["item", "1．", "未実施分治療に対して返金が生じる場合であっても、その金額は\n**治療進行度・通院回数・装置使用状況・治療管理期間等を総合的に考慮し、当院が合理的に算定した金額**とします。"],
+      ["item", "2．", "患者は、\n**「支払額の○％返金」「残期間分の単純割返金」「全額返金」**\n等の一律・機械的な返金計算を求めることはできません。"],
+      ["h", "第5条（分割支払いに関する特則）"],
+      ["item", "1．", "分割支払いは、患者の利便性を考慮した**当院独自の支払方法**であり、治療費の分割請求を意味するものではありません。"],
+      ["item", "2．", "分割支払いを選択した場合であっても、**治療費総額の支払義務は治療開始時点で確定**します。"],
+      ["item", "3．", "治療中止時点で、実施済み治療費が支払済み金額を上回る場合、**患者は不足分を速やかに支払う義務**を負うものとします。"],
+      ["h", "第6条（治療結果・審美的評価に関する確認）"],
+      ["item", "1．", "矯正治療は医学的根拠に基づき適切に行われますが、\n歯の移動速度・治療期間・最終的な歯並び・顔貌の印象・審美的評価には個人差があり、**主観的満足度の完全保証を行うものではありません。**"],
+      ["item", "2．", "以下の理由による返金・解約請求は認められません。"],
+      ["item", "・", "「想像していた仕上がりと違う」", 2],
+      ["item", "・", "「もっと短期間で終わると思っていた」", 2],
+      ["item", "・", "「他人と比較して納得できない」", 2],
+      ["h", "第7条（第三者意見・他院評価への対応）"],
+      ["p", "患者が第三者（他歯科医院、知人、インターネット情報等）の意見を理由として治療内容に異議を唱えた場合であっても、\n**当院の医学的判断および治療方針が不適切であることを直接的に証明するものではなく、返金・解約の根拠とはなりません。**"],
+      ["h", "第8条（合意確認・紛争防止）"],
+      ["p", "患者（および保護者）は、本誓約書の内容について十分な説明を受け、理解・納得した上で署名・押印するものであり、\n**後日、本内容について「説明を受けていない」「理解していなかった」との主張を行わないこと**に同意します。"]
+    ],
+    "consent": "上記の内容を十分に理解・同意の上、基本矯正料の支払いを誓約いたします。",
+    "labels": {"signer": "氏名（患者・保護者）", "address": "住所", "clinic": "歯科医院名", "doctor": "歯科医師"}
+  }
+};
+
+/* ==========================================================================
+   ここから下はプログラムです（通常は変更不要）
+   ========================================================================== */
+(function () {
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  function el(tag, attrs) {
+    var n = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    });
+    for (var i = 2; i < arguments.length; i++) append(n, arguments[i]);
+    return n;
+  }
+  function append(n, c) {
+    if (c === null || c === undefined || c === false) return;
+    if (Array.isArray(c)) { c.forEach(function (x) { append(n, x); }); return; }
+    n.appendChild(c.nodeType ? c : document.createTextNode(String(c)));
+  }
+  function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  /* ---------- 文字装飾の解析 ---------- */
+  function parseRuns(text) {
+    var runs = [], b = false, u = false, buf = '';
+    function flush() { if (buf) { runs.push({ t: buf, b: b, u: u }); buf = ''; } }
+    for (var i = 0; i < text.length; i++) {
+      var two = text.substr(i, 2);
+      if (two === '**') { flush(); b = !b; i++; continue; }
+      if (two === '__') { flush(); u = !u; i++; continue; }
+      if (text[i] === '\n') { flush(); runs.push({ br: true }); continue; }
+      buf += text[i];
+    }
+    flush();
+    return runs;
+  }
+  function richText(text) {
+    var frag = document.createDocumentFragment();
+    parseRuns(text).forEach(function (r) {
+      if (r.br) { frag.appendChild(document.createElement('br')); return; }
+      var node = document.createTextNode(r.t);
+      if (r.u) node = el('span', { class: 'u' }, node);
+      if (r.b) node = el('strong', null, node);
+      frag.appendChild(node);
+    });
+    return frag;
+  }
+
+  /* ---------- 日付 ---------- */
+  function jstNow(d) {
+    var f = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false });
+    var o = {};
+    f.formatToParts(d).forEach(function (p) { o[p.type] = p.value; });
+    return { y: +o.year, m: +o.month, d: +o.day, H: (+o.hour) % 24, M: +o.minute, S: +o.second };
+  }
+  function wareki(y, m, d) {
+    var v = y * 10000 + m * 100 + d;
+    if (v >= 20190501) return { era: '令和', n: y - 2018 };
+    if (v >= 19890108) return { era: '平成', n: y - 1988 };
+    if (v >= 19261225) return { era: '昭和', n: y - 1925 };
+    if (v >= 19120730) return { era: '大正', n: y - 1911 };
+    return { era: '明治', n: y - 1867 };
+  }
+  function eraText(e) { return e.era + (e.n === 1 ? '元' : e.n); }
+  function fmtDate(t) {
+    if (CONFIG.dateStyle === 'wareki') return eraText(wareki(t.y, t.m, t.d)) + '年' + t.m + '月' + t.d + '日';
+    return t.y + '年' + t.m + '月' + t.d + '日';
+  }
+  function fmtDob(t) {
+    return t.y + '年（' + eraText(wareki(t.y, t.m, t.d)) + '年）' + t.m + '月' + t.d + '日';
+  }
+  function yearLabel(y) {
+    var a = wareki(y, 1, 1), b = wareki(y, 12, 31);
+    return y + '年（' + eraText(a) + '年' + (a.era !== b.era ? '・' + eraText(b) + '年' : '') + '）';
+  }
+  function daysIn(y, m) { return new Date(y, m, 0).getDate(); }
+  function ageOn(dob, t) {
+    var a = t.y - dob.y;
+    if (t.m < dob.m || (t.m === dob.m && t.d < dob.d)) a--;
+    return a;
+  }
+
+  /* ---------- 状態 ---------- */
+  var state;
+  function freshState() {
+    return {
+      plan: null, options: {}, docs: [], readIndex: 0, agreed: {},
+      sig: { patient: null, guardian: null },
+      docId: null, signedAt: null, pdf: null,
+      submit: { status: 'idle', receipt: null, error: null }
+    };
+  }
+  state = freshState();
+
+  function docTitle(id) { var d = DOCUMENTS[id]; return d.listTitle || d.title; }
+  function currentPlan() { for (var i = 0; i < PLANS.length; i++) if (PLANS[i].id === state.plan) return PLANS[i]; return null; }
+  function computeDocs() {
+    var set = {};
+    var p = currentPlan();
+    if (p) p.docs.forEach(function (d) { set[d] = true; });
+    OPTIONS.forEach(function (o) { if (state.options[o.id]) o.docs.forEach(function (d) { set[d] = true; }); });
+    return DOC_ORDER.filter(function (d) { return set[d] && DOCUMENTS[d]; });
+  }
+
+  /* ---------- 画面遷移 ---------- */
+  var STEPS = ['plan', 'info', 'read', 'sign', 'done'];
+  var current = 'plan';
+  function goStep(name, opts) {
+    opts = opts || {};
+    if (state.submit.status === 'ok' && name !== 'done') name = 'done';
+    today = jstNow(new Date());
+    current = name;
+    STEPS.forEach(function (s) { $('#step-' + s).hidden = (s !== name); });
+    var idx = STEPS.indexOf(name);
+    $$('#wire li').forEach(function (li, i) {
+      li.className = i < idx ? 'done' : (i === idx ? 'now' : '');
+      if (i === idx) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+    });
+    $('#wire').style.setProperty('--p', (idx / (STEPS.length - 1) * 100) + '%');
+    if (!opts.noHistory) {
+      try {
+        var st = { step: name, readIndex: state.readIndex };
+        if (opts.replace) history.replaceState(st, ''); else history.pushState(st, '');
+      } catch (e) { /* sandboxed */ }
+    }
+    window.scrollTo(0, 0);
+    var hEl = $('#h-' + name);
+    if (hEl && !opts.noFocus) { try { hEl.focus({ preventScroll: true }); } catch (e) { hEl.focus(); } }
+  }
+  window.addEventListener('popstate', function (ev) {
+    var st = ev.state;
+    if (!st || !st.step) return;
+    if (state.submit.status === 'ok') { goStep('done', { replace: true }); return; }
+    var target = st.step;
+    if (target === 'done' && !state.pdf) target = 'sign';
+    if ((target === 'read' || target === 'sign') && (!state.docs.length || computeDocs().join() !== state.docs.join())) target = state.plan ? 'info' : 'plan';
+    if (target === 'read') { state.readIndex = Math.min(st.readIndex || 0, state.docs.length - 1); renderRead(); }
+    if (target === 'sign') renderSign();
+    goStep(target, { noHistory: true });
+  });
+  function dirty() { return !!(state.plan || $('#f-name').value) && state.submit.status !== 'ok'; }
+  window.addEventListener('beforeunload', function (e) {
+    if (dirty()) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  function showErr(id, msg) { var n = $('#' + id); if (!n) return; n.textContent = msg || ''; n.hidden = !msg; }
+
+  /* ======================================================================
+     1. 治療内容
+     ====================================================================== */
+  function buildPlanStep() {
+    var wrap = $('#plan-groups');
+    [{ key: 'adult', title: '成人の方' }, { key: 'child', title: 'お子さま（小児）の方' }].forEach(function (g) {
+      var fs = el('fieldset', { class: 'choices' }, el('legend', null, g.title));
+      PLANS.filter(function (p) { return p.group === g.key; }).forEach(function (p) {
+        fs.appendChild(choiceRow('radio', 'plan', p.id, p.label + 'の方', p.desc));
+      });
+      wrap.appendChild(fs);
+    });
+    var fo = el('fieldset', { class: 'choices' }, el('legend', null, '追加の処置（該当する方のみ）'),
+      el('p', { class: 'choices-note' }, '担当医から説明を受けた方は、あてはまるものをすべて選んでください。'));
+    OPTIONS.forEach(function (o) { fo.appendChild(choiceRow('checkbox', 'opt', o.id, o.label, o.desc)); });
+    wrap.appendChild(fo);
+    wrap.addEventListener('change', onPlanChange);
+    wrap.addEventListener('focusin', function (e) { var c = e.target.closest('.choice'); if (c) c.classList.add('has-focus'); });
+    wrap.addEventListener('focusout', function (e) { var c = e.target.closest('.choice'); if (c) c.classList.remove('has-focus'); });
+  }
+  function choiceRow(type, name, value, label, desc) {
+    var id = name + '-' + value;
+    return el('label', { class: 'choice ' + type, for: id },
+      el('input', { type: type, name: name, value: value, id: id }),
+      el('span', { class: 'mark', 'aria-hidden': 'true' }),
+      el('span', { class: 'choice-body' }, el('span', { class: 'choice-label' }, label), desc ? el('span', { class: 'choice-desc' }, desc) : null));
+  }
+  function onPlanChange() {
+    var r = $('input[name="plan"]:checked');
+    state.plan = r ? r.value : null;
+    state.options = {};
+    $$('input[name="opt"]').forEach(function (c) { if (c.checked) state.options[c.value] = true; });
+    $$('#plan-groups .choice').forEach(function (c) { c.classList.toggle('is-checked', $('input', c).checked); });
+    if (state.plan) showErr('plan-err', '');
+    updateDocList();
+    updateGuardian();
+  }
+  function updateDocList() {
+    var docs = computeDocs();
+    var box = $('#doclist');
+    if (!state.plan) { box.hidden = true; return; }
+    $('#doclist-h').textContent = 'お読みいただく同意書（' + docs.length + '件）';
+    var ol = $('#doclist-ol'); clear(ol);
+    docs.forEach(function (d) { ol.appendChild(el('li', null, docTitle(d))); });
+    box.hidden = false;
+  }
+
+  /* ======================================================================
+     2. お名前など
+     ====================================================================== */
+  var today = jstNow(new Date());
+  function buildInfoStep() {
+    var ys = $('#f-dob-y'), ms = $('#f-dob-m');
+    ys.appendChild(el('option', { value: '' }, '生まれた年を選ぶ'));
+    for (var y = today.y; y >= today.y - 100; y--) ys.appendChild(el('option', { value: y }, yearLabel(y)));
+    ms.appendChild(el('option', { value: '' }, '－'));
+    for (var m = 1; m <= 12; m++) ms.appendChild(el('option', { value: m }, m));
+    fillDays();
+    ys.addEventListener('change', function () { fillDays(); updateAge(); });
+    ms.addEventListener('change', function () { fillDays(); updateAge(); });
+    $('#f-dob-d').addEventListener('change', updateAge);
+
+    if (CONFIG.doctors && CONFIG.doctors.length) {
+      var ds = $('#f-doctor');
+      ds.appendChild(el('option', { value: '' }, 'わからない場合は空欄のまま'));
+      CONFIG.doctors.forEach(function (n) { ds.appendChild(el('option', { value: n }, n)); });
+      $('#doctor-field').hidden = false;
+    }
+    $('#f-grel').addEventListener('change', function () {
+      var other = this.value === '__other';
+      $('#f-grel-other').hidden = !other;
+      if (other) $('#f-grel-other').focus();
+    });
+    $('#info-form').addEventListener('input', function (e) {
+      var f = e.target.closest('.field');
+      if (f && f.classList.contains('invalid')) { f.classList.remove('invalid'); var er = $('.err', f); if (er) er.remove(); }
+    });
+    $('#info-form').addEventListener('submit', function (e) { e.preventDefault(); });
+  }
+  function fillDays() {
+    var ds = $('#f-dob-d'), keep = ds.value;
+    var y = +$('#f-dob-y').value || 2000, m = +$('#f-dob-m').value || 1;
+    var n = daysIn(y, m);
+    clear(ds);
+    ds.appendChild(el('option', { value: '' }, '－'));
+    for (var d = 1; d <= n; d++) ds.appendChild(el('option', { value: d }, d));
+    if (keep && +keep <= n) ds.value = keep;
+  }
+  function dob() {
+    var y = +$('#f-dob-y').value, m = +$('#f-dob-m').value, d = +$('#f-dob-d').value;
+    return (y && m && d) ? { y: y, m: m, d: d } : null;
+  }
+  function patientAge() { var b = dob(); return b ? ageOn(b, today) : null; }
+  function updateAge() {
+    var a = patientAge();
+    $('#age-out').textContent = (a !== null && a >= 0) ? '本日時点で ' + a + '歳' : '';
+    updateGuardian();
+  }
+  function needsGuardian() {
+    var p = currentPlan();
+    if (p && p.group === 'child') return true;
+    var a = patientAge();
+    return a !== null && a < CONFIG.guardianAge;
+  }
+  function updateGuardian() {
+    var need = needsGuardian(), p = currentPlan();
+    $('#guardian-card').hidden = !need;
+    var child = p && p.group === 'child';
+    $('#patient-card-h').textContent = child ? '患者さま（お子さま）' : '患者さま';
+    $('#name-label').textContent = child ? 'お子さまのお名前' : 'お名前';
+    $('#guardian-note').textContent = child
+      ? 'お子さまの治療のため、保護者さまの署名が必要です。'
+      : CONFIG.guardianAge + '歳未満の方は、保護者さまの署名が必要です。';
+  }
+  function fieldError(key, msg) {
+    var f = $('.field[data-f="' + key + '"]');
+    if (!f) return null;
+    f.classList.add('invalid');
+    var er = $('.err', f);
+    if (!er) { er = el('p', { class: 'err' }); f.appendChild(er); }
+    er.textContent = msg;
+    return f;
+  }
+  function clearFieldErrors() {
+    $$('#info-form .field.invalid').forEach(function (f) { f.classList.remove('invalid'); });
+    $$('#info-form .field .err').forEach(function (e) { e.remove(); });
+  }
+  function readInfo() {
+    var rel = $('#f-grel').value;
+    if (rel === '__other') rel = $('#f-grel-other').value.trim();
+    return {
+      name: $('#f-name').value.trim().replace(/\s+/g, ' '),
+      kana: $('#f-kana').value.trim().replace(/\s+/g, ' '),
+      dob: dob(),
+      address: $('#f-address').value.trim().replace(/\s*\n\s*/g, ' '),
+      phone: $('#f-phone').value.trim(),
+      card: $('#f-card').value.trim(),
+      doctor: $('#f-doctor').value || '',
+      guardian: needsGuardian() ? { name: $('#f-gname').value.trim().replace(/\s+/g, ' '), relation: rel } : null
+    };
+  }
+  function validateInfo() {
+    clearFieldErrors();
+    var v = readInfo(), first = null;
+    function bad(key, msg) { var f = fieldError(key, msg); if (!first) first = f; }
+    if (!v.name) bad('name', 'お名前を入力してください。');
+    if (!v.dob) bad('dob', '生年月日を選んでください。');
+    else if (patientAge() < 0) bad('dob', '生年月日をご確認ください。');
+    else if (currentPlan() && currentPlan().group === 'child' && patientAge() >= CONFIG.guardianAge) bad('dob', '小児の治療が選ばれています。お子さまの生年月日をご確認ください。');
+    if (!v.address) bad('address', 'ご住所を入力してください。');
+    if (v.phone && !/^[0-9０-９\-－ー()（）+＋\s]{10,20}$/.test(v.phone)) bad('phone', '電話番号をご確認ください。');
+    if (v.guardian) {
+      if (!v.guardian.name) bad('gname', '保護者さまのお名前を入力してください。');
+      if (!v.guardian.relation) bad('grel', '続柄を選んでください。');
+    }
+    if (first) {
+      var inp = $('input,select,textarea', first);
+      first.scrollIntoView({ block: 'center' });
+      if (inp) setTimeout(function () { inp.focus(); }, 50);
+      return null;
+    }
+    return v;
+  }
+
+  /* ======================================================================
+     3. 同意書の確認
+     ====================================================================== */
+  function renderRead() {
+    var id = state.docs[state.readIndex], d = DOCUMENTS[id], info = readInfo();
+    var n = state.docs.length;
+    var cnt = $('#read-count'); clear(cnt);
+    append(cnt, ['同意書 ', el('b', null, String(state.readIndex + 1)), ' / ' + n + ' 件目']);
+    var box = $('#read-doc'); clear(box);
+    var sheet = el('article', { class: 'sheet doc', 'aria-label': d.title });
+    sheet.appendChild(el('h3', { class: 'doc-title' }, d.title));
+    if (d.subtitle) sheet.appendChild(el('p', { class: 'doc-sub' }, d.subtitle));
+    if (d.showPatientHeader) {
+      sheet.appendChild(el('div', { class: 'doc-fill' }, el('dl', null,
+        el('dt', null, '患者氏名'), el('dd', null, info.name + '　様'),
+        el('dt', null, '生年月日'), el('dd', null, info.dob ? fmtDob(info.dob) : ''))));
+    }
+    if (d.layout === 'pledge') {
+      var signer = info.guardian ? info.guardian.name + '（保護者）' : info.name;
+      sheet.appendChild(el('div', { class: 'doc-fill' }, el('dl', null,
+        el('dt', null, '日付'), el('dd', null, fmtDate(today)),
+        el('dt', null, d.labels.address), el('dd', null, info.address),
+        el('dt', null, d.labels.signer), el('dd', null, signer, el('span', { class: 'later' }, '　※署名は最後に')))));
+      sheet.appendChild(el('p', { class: 'doc-lead' }, richText(d.statement)));
+    }
+    d.blocks.forEach(function (b) {
+      var t = b[0];
+      if (t === 'lead') sheet.appendChild(el('p', { class: 'doc-lead' }, richText(b[1])));
+      else if (t === 'sec') sheet.appendChild(el('h4', { class: 'doc-sec' }, richText(b[1])));
+      else if (t === 'h') sheet.appendChild(el('h4', { class: 'doc-h' }, richText(b[1])));
+      else if (t === 'p') sheet.appendChild(el('p', { class: 'doc-p' }, richText(b[1])));
+      else if (t === 'imp') sheet.appendChild(el('p', { class: 'doc-imp' }, richText(b[1])));
+      else if (t === 'item') sheet.appendChild(el('div', { class: 'doc-item' + (b[3] === 2 ? ' lv2' : '') },
+        el('span', { class: 'mk' }, /^\*\*.*\*\*$/.test(b[2]) ? el('strong', null, b[1]) : b[1]), el('span', { class: 'tx' }, richText(b[2]))));
+      else if (t === 'center') sheet.appendChild(el('p', { class: 'doc-center' }, richText(b[1])));
+      else if (t === 'right') sheet.appendChild(el('p', { class: 'doc-right' }, richText(b[1])));
+    });
+    if (d.layout === 'pledge') {
+      sheet.appendChild(el('p', { class: 'doc-right' }, '以上'));
+      sheet.appendChild(el('p', { class: 'doc-foot' }, d.labels.clinic + '：' + CONFIG.clinicName));
+    }
+    box.appendChild(sheet);
+
+    var at = $('#agree-text'); clear(at);
+    if (d.consentHeading) at.appendChild(el('span', { class: 'agree-h' }, d.consentHeading));
+    at.appendChild(richText(d.consent));
+    var cb = $('#agree-cb');
+    cb.checked = !!state.agreed[id];
+    $('#agree').classList.toggle('is-checked', cb.checked);
+    showErr('read-err', '');
+    $('#read-next').textContent = state.readIndex < n - 1 ? '次の同意書へ' : '署名へ進む';
+  }
+  function bindRead() {
+    var cb = $('#agree-cb');
+    cb.addEventListener('change', function () {
+      state.agreed[state.docs[state.readIndex]] = cb.checked;
+      $('#agree').classList.toggle('is-checked', cb.checked);
+      if (cb.checked) showErr('read-err', '');
+    });
+    cb.addEventListener('focus', function () { $('#agree').classList.add('has-focus'); });
+    cb.addEventListener('blur', function () { $('#agree').classList.remove('has-focus'); });
+    $('#read-next').addEventListener('click', function () {
+      var id = state.docs[state.readIndex];
+      if (!state.agreed[id]) { showErr('read-err', '内容をご確認のうえ、□にチェックを入れてください。'); $('#agree').scrollIntoView({ block: 'center' }); return; }
+      if (state.readIndex < state.docs.length - 1) { state.readIndex++; renderRead(); goStep('read'); }
+      else { renderSign(); goStep('sign'); }
+    });
+  }
+
+  /* ======================================================================
+     4. 署名
+     ====================================================================== */
+  function sigRoles() {
+    var info = readInfo();
+    if (info.guardian) return [
+      { key: 'guardian', title: '保護者さまのご署名', who: info.guardian.name + ' さま（' + info.guardian.relation + '）', required: true },
+      { key: 'patient', title: 'お子さまご本人のご署名', who: info.name + ' さま', required: false, note: 'ご本人が書ける場合のみで構いません。' }
+    ];
+    return [{ key: 'patient', title: 'ご署名（患者さまご本人）', who: info.name + ' さま', required: true }];
+  }
+  function renderSign() {
+    var info = readInfo();
+    $('#sign-lead').textContent = info.guardian
+      ? '保護者さまのご署名をお願いします。お子さまご本人の署名は任意です。'
+      : 'お名前をフルネームで手書きしてください。';
+    $('#sum-h').textContent = '同意する内容（' + state.docs.length + '件）';
+    var ul = $('#sum-docs'); clear(ul);
+    state.docs.forEach(function (d) { ul.appendChild(el('li', null, docTitle(d))); });
+    var dl = $('#sum-facts'); clear(dl);
+    var p = currentPlan();
+    var opts = OPTIONS.filter(function (o) { return state.options[o.id]; }).map(function (o) { return o.label; });
+    var age = patientAge();
+    var facts = [['治療内容', p.label + (opts.length ? '＋' + opts.join('・') : '')], ['患者さま', info.name + ' さま（' + age + '歳）']];
+    if (info.guardian) facts.push(['保護者さま', info.guardian.name + ' さま（' + info.guardian.relation + '）']);
+    facts.push(['同意日', fmtDate(today)]);
+    facts.forEach(function (f) { dl.appendChild(el('dt', null, f[0])); dl.appendChild(el('dd', null, f[1])); });
+
+    var wrap = $('#sig-fields'); clear(wrap);
+    if (!info.guardian) state.sig.guardian = null;
+    sigRoles().forEach(function (r) {
+      var signed = !!state.sig[r.key];
+      var img = el('img', { alt: r.title, hidden: !signed });
+      if (signed) img.src = sigPreview(state.sig[r.key]);
+      var box = el('button', { type: 'button', class: 'sigbox' + (signed ? ' signed' : ''), 'aria-label': r.title + (signed ? '（書き直す）' : '（タップして署名）') },
+        el('span', { class: 'line', 'aria-hidden': 'true' }), el('span', { class: 'x', 'aria-hidden': 'true' }, '×'),
+        el('span', { class: 'prompt' }, 'ここをタップして署名'), img);
+      var redo = el('button', { type: 'button', class: 'linkbtn', hidden: !signed }, '書き直す');
+      var open = function () {
+        Pad.open(r.title, r.who, function (strokes) {
+          state.sig[r.key] = strokes;
+          img.src = sigPreview(strokes); img.hidden = false;
+          box.classList.add('signed'); redo.hidden = false;
+          field.classList.remove('invalid'); showErr('sign-err', '');
+        });
+      };
+      box.addEventListener('click', open); redo.addEventListener('click', open);
+      var field = el('div', { class: 'sigfield' },
+        el('label', { class: 'lbl' }, r.title, el('span', { class: 'tag ' + (r.required ? 'req' : 'opt') }, r.required ? '必須' : '任意')),
+        r.note ? el('p', { class: 'sig-note' }, r.note) : null,
+        box, el('div', { class: 'sigfield-foot' }, redo));
+      field.setAttribute('data-role', r.key);
+      wrap.appendChild(field);
+    });
+  }
+
+  /* ---------- 署名パッド ---------- */
+  var SIG_INK = '#1b2f6b';
+  function drawStroke(ctx, pts, s, w, ox, oy) {
+    if (!pts.length) return;
+    var X = function (i) { return ox + pts[i][0] * s; }, Y = function (i) { return oy + pts[i][1] * s; };
+    if (pts.length === 1) { ctx.beginPath(); ctx.arc(X(0), Y(0), w / 2, 0, Math.PI * 2); ctx.fill(); return; }
+    ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0));
+    for (var i = 1; i < pts.length - 1; i++) ctx.quadraticCurveTo(X(i), Y(i), (X(i) + X(i + 1)) / 2, (Y(i) + Y(i + 1)) / 2);
+    ctx.lineTo(X(pts.length - 1), Y(pts.length - 1));
+    ctx.stroke();
+  }
+  function sigBounds(strokes) {
+    var b = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+    strokes.forEach(function (st) { st.forEach(function (p) { if (p[0] < b.x0) b.x0 = p[0]; if (p[0] > b.x1) b.x1 = p[0]; if (p[1] < b.y0) b.y0 = p[1]; if (p[1] > b.y1) b.y1 = p[1]; }); });
+    return b;
+  }
+  function drawSigFit(ctx, strokes, box, color, w, align) {
+    var b = sigBounds(strokes);
+    var bw = Math.max(b.x1 - b.x0, 1), bh = Math.max(b.y1 - b.y0, 1);
+    var s = Math.min((box.w - w) / bw, (box.h - w) / bh);
+    var ox = (align === 'center' ? box.x + (box.w - bw * s) / 2 : box.x + w / 2) - b.x0 * s;
+    var oy = box.y + (box.h - bh * s) / 2 - b.y0 * s;
+    ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color;
+    strokes.forEach(function (st) { drawStroke(ctx, st, s, w, ox, oy); });
+    ctx.restore();
+  }
+  function sigPreview(strokes) {
+    var c = document.createElement('canvas'); c.width = 900; c.height = 300;
+    drawSigFit(c.getContext('2d'), strokes, { x: 10, y: 20, w: 880, h: 260 }, SIG_INK, 7, 'left');
+    return c.toDataURL('image/png');
+  }
+
+  var Pad = (function () {
+    var modal = $('#pad'), area = $('#pad-area'), canvas = $('#pad-canvas'), ctx = canvas.getContext('2d');
+    var strokes = [], cur = null, W = 0, H = 0, dpr = 1, cb = null, lastFocus = null, LW = 3.2;
+    function resize() {
+      var r = area.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      if (W && H && (Math.abs(r.width - W) > 1 || Math.abs(r.height - H) > 1)) {
+        var s = Math.min(r.width / W, r.height / H);
+        strokes.forEach(function (st) { st.forEach(function (p) { p[0] *= s; p[1] *= s; }); });
+      }
+      W = r.width; H = r.height; dpr = Math.min(window.devicePixelRatio || 1, 3);
+      canvas.width = Math.round(W * dpr); canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+      redraw();
+    }
+    function redraw() {
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = SIG_INK; ctx.fillStyle = SIG_INK;
+      strokes.forEach(function (st) { drawStroke(ctx, st, 1, LW, 0, 0); });
+    }
+    function pos(e) { var r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+    function start(p) { cur = [p]; strokes.push(cur); $('#pad-err').textContent = ''; redraw(); }
+    function move(p) {
+      if (!cur) return;
+      var last = cur[cur.length - 1];
+      if (Math.abs(p[0] - last[0]) + Math.abs(p[1] - last[1]) < 1.2) return;
+      cur.push(p);
+      var n = cur.length;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.strokeStyle = SIG_INK; ctx.lineWidth = LW; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      if (n < 3) { ctx.moveTo(cur[0][0], cur[0][1]); ctx.lineTo(p[0], p[1]); }
+      else {
+        var a = cur[n - 3], b = cur[n - 2];
+        ctx.moveTo((a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
+        ctx.quadraticCurveTo(b[0], b[1], (b[0] + p[0]) / 2, (b[1] + p[1]) / 2);
+      }
+      ctx.stroke();
+    }
+    function end() { if (cur) { cur = null; redraw(); } }
+    if (window.PointerEvent) {
+      canvas.addEventListener('pointerdown', function (e) {
+        if (e.button > 0) return;
+        e.preventDefault();
+        try { canvas.setPointerCapture(e.pointerId); } catch (x) {}
+        start(pos(e));
+      });
+      canvas.addEventListener('pointermove', function (e) {
+        if (!cur) return;
+        e.preventDefault();
+        var list = e.getCoalescedEvents ? e.getCoalescedEvents() : null;
+        if (list && list.length) list.forEach(function (ce) { move(pos(ce)); }); else move(pos(e));
+      });
+      ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) { canvas.addEventListener(t, end); });
+    } else {
+      canvas.addEventListener('touchstart', function (e) { e.preventDefault(); start(pos(e.touches[0])); }, { passive: false });
+      canvas.addEventListener('touchmove', function (e) { e.preventDefault(); move(pos(e.touches[0])); }, { passive: false });
+      canvas.addEventListener('touchend', end);
+      canvas.addEventListener('mousedown', function (e) { start(pos(e)); });
+      window.addEventListener('mousemove', function (e) { if (cur) move(pos(e)); });
+      window.addEventListener('mouseup', end);
+    }
+    function inkLength() {
+      var len = 0;
+      strokes.forEach(function (st) { for (var i = 1; i < st.length; i++) len += Math.hypot(st[i][0] - st[i - 1][0], st[i][1] - st[i - 1][1]); });
+      return len;
+    }
+    function close() {
+      modal.hidden = true;
+      document.body.style.overflow = '';
+      window.removeEventListener('resize', resize);
+      if (lastFocus) try { lastFocus.focus(); } catch (e) {}
+    }
+    $$('[data-pad]', modal).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var act = b.getAttribute('data-pad');
+        if (act === 'cancel') close();
+        else if (act === 'undo') { strokes.pop(); redraw(); }
+        else if (act === 'clear') { strokes = []; redraw(); }
+        else if (act === 'ok') {
+          var bb = strokes.length ? sigBounds(strokes) : null;
+          if (!bb || inkLength() < 40 || (bb.x1 - bb.x0 < 24 && bb.y1 - bb.y0 < 24)) {
+            $('#pad-err').textContent = '署名が短すぎるようです。フルネームでお書きください。';
+            return;
+          }
+          var copy = strokes.map(function (st) { return st.map(function (p) { return [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10]; }); });
+          close();
+          if (cb) cb(copy);
+        }
+      });
+    });
+    modal.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    return {
+      open: function (title, who, done) {
+        lastFocus = document.activeElement;
+        cb = done; strokes = []; cur = null; W = 0; H = 0;
+        $('#pad-title').textContent = title + '：' + who;
+        $('#pad-err').textContent = '';
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('resize', resize);
+        requestAnimationFrame(function () { resize(); $('[data-pad="ok"]', modal).focus({ preventScroll: true }); });
+      }
+    };
+  })();
+
+  /* ======================================================================
+     PDF 作成（端末内で作成。外部サービスは使いません）
+     ====================================================================== */
+  var PDF_SANS = '"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Noto Sans CJK JP","Yu Gothic","YuGothic","Meiryo",sans-serif';
+  var PDF_SERIF = '"Hiragino Mincho ProN","Yu Mincho","YuMincho","Noto Serif JP","Noto Serif CJK JP","MS PMincho",serif';
+  var KIN_NO_START = '、。，．,.）」』】〕〉》｝］〙〗〟’”)]}ゝゞヽヾーァィゥェォッャュョヮヵヶぁぃぅぇぉっゃゅょゎゕゖ々〻‐゠–〜～？！?!・：；:;％%';
+  var KIN_HANG = '、。，．,.';
+  var KIN_NO_END = '（「『【〔〈《｛［〘〖〝‘“([{￥＄＃';
+  var ASCII_WORD = /[A-Za-z0-9.,:;%\/\-+'"&@#~$_=*!?]/;
+
+  function PdfLayout(dpi) {
+    var k = dpi / 25.4, pt = dpi / 72;
+    var W = Math.round(210 * k), H = Math.round(297 * k);
+    var L = 16 * k, R = W - 16 * k, T = 19 * k, B = H - 15 * k, BASE = 10;
+    var canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    var cache = {}, pages = [], page = null, y = T;
+
+    function F(size, bold, serif) { return (bold ? '700 ' : '400 ') + (size * pt).toFixed(1) + 'px ' + (serif ? PDF_SERIF : PDF_SANS); }
+    function mw(s, f) { var key = f + '|' + s; var w = cache[key]; if (w === undefined) { ctx.font = f; w = cache[key] = ctx.measureText(s).width; } return w; }
+    function newPage() { page = { ops: [] }; pages.push(page); y = T; }
+    function atTop() { return y <= T + 0.5; }
+    function room() { return B - y; }
+    function text(s, x, ym, f, c) { page.ops.push({ t: 'text', s: s, x: x, y: ym, f: f, c: c }); }
+    function rule(x1, x2, yy, wmm, c) { page.ops.push({ t: 'line', x1: x1, x2: x2, y: yy, w: Math.max(1, (wmm || 0.25) * k), c: c || '#444' }); }
+
+    function tokens(str, size, bold, serif) {
+      var out = [];
+      parseRuns(str).forEach(function (r) {
+        if (r.br) { out.push({ br: true }); return; }
+        var f = F(size, bold || r.b, serif), s = r.t, i = 0;
+        while (i < s.length) {
+          var c = s[i];
+          if (c === ' ') { out.push({ s: ' ', w: mw(' ', f), f: f, u: r.u, sp: true }); i++; continue; }
+          if (ASCII_WORD.test(c)) {
+            var j = i + 1; while (j < s.length && ASCII_WORD.test(s[j])) j++;
+            var wd = s.slice(i, j); out.push({ s: wd, w: mw(wd, f), f: f, u: r.u }); i = j; continue;
+          }
+          var ch = String.fromCodePoint(s.codePointAt(i));
+          out.push({ s: ch, w: mw(ch, f), f: f, u: r.u }); i += ch.length;
+        }
+      });
+      return out;
+    }
+    function sumW(a) { var n = 0; a.forEach(function (t) { n += t.w; }); return n; }
+    function breakLines(toks, width, first) {
+      var lines = [], cur = [], w = 0;
+      function avail() { return width - (lines.length === 0 ? first : 0); }
+      function push(justify) {
+        while (cur.length && cur[cur.length - 1].sp) cur.pop();
+        lines.push({ toks: cur, w: sumW(cur), justify: justify, first: lines.length === 0 });
+        cur = []; w = 0;
+      }
+      toks.forEach(function (t) {
+        if (t.br) { push(false); return; }
+        if (t.sp && !cur.length) return;
+        if (w + t.w <= avail() + 0.5) { cur.push(t); w += t.w; return; }
+        if (cur.length && KIN_HANG.indexOf(t.s) >= 0) { cur.push(t); push(false); return; }
+        var moved = t.sp ? [] : [t];
+        while (cur.length > 1 && moved.length && KIN_NO_START.indexOf(moved[0].s.charAt(0)) >= 0) moved.unshift(cur.pop());
+        while (cur.length > 1 && KIN_NO_END.indexOf(cur[cur.length - 1].s) >= 0) moved.unshift(cur.pop());
+        push(true);
+        while (moved.length && moved[0].sp) moved.shift();
+        cur = moved; w = sumW(cur);
+      });
+      if (cur.length || !lines.length) push(false);
+      return lines;
+    }
+    /* 段落を配置。o: size, bold, serif, indent(mm), first(em), marker, align, lh, before(mm), after(mm), keep(px), color */
+    function para(str, o) {
+      o = o || {};
+      var size = o.size || BASE, lh = (o.lh || 1.62) * size * pt, em = size * pt;
+      var x0 = L + (o.indent || 0) * k, right = o.right || R;
+      var markF = null, markW = 0;
+      if (o.marker) { markF = F(size, o.markerBold, o.serif); markW = Math.max(mw(o.marker, markF) + 0.35 * em, (o.markerMin || 0) * em); }
+      var width = right - x0 - markW, firstPx = (o.first || 0) * em;
+      var lines = breakLines(tokens(str, size, o.bold, o.serif), width, firstPx);
+      if (o.before && !atTop()) y += o.before * k;
+      var need = Math.min(lines.length, 2) * lh + (o.keep || 0);
+      if (room() < need && !atTop()) newPage();
+      lines.forEach(function (ln, i) {
+        if (room() < lh) newPage();
+        var ym = y + lh / 2, availW = width - (ln.first ? firstPx : 0);
+        var x = x0 + markW + (ln.first ? firstPx : 0), extra = 0;
+        if (i === 0 && o.marker) text(o.marker, x0, ym, markF, o.color);
+        if (o.align === 'center') x += (availW - ln.w) / 2;
+        else if (o.align === 'right') x += availW - ln.w;
+        else if (ln.justify && ln.toks.length > 1) { var sl = availW - ln.w; if (sl > 0 && sl < em * 2.2) extra = sl / (ln.toks.length - 1); }
+        ln.toks.forEach(function (t) {
+          page.ops.push({ t: 'text', s: t.s, x: x, y: ym, f: t.f, c: o.color, u: t.u, w: t.w, em: em });
+          x += t.w + extra;
+        });
+        y += lh;
+      });
+      if (o.after) y += o.after * k;
+      return lines.length;
+    }
+    function lineCount(str, size, bold, width) { return breakLines(tokens(str, size, bold), width, 0).length; }
+    function fitFont(str, size, maxW, bold) { var s = size; while (s > 6.5 && mw(str, F(s, bold)) > maxW) s -= 0.5; return F(s, bold); }
+
+    /* 記入欄の1行（ラベル：値 ＋ 下線 ＋ 署名） */
+    function formRow(label, value, hmm, opts) {
+      opts = opts || {};
+      var top = y, bot = y + hmm * k;
+      var ymid = opts.sig !== undefined ? bot - 5.2 * k : (top + bot) / 2 + 0.6 * k;
+      var labelW = (opts.labelW || 40) * k, nameX = L + labelW, sigX = L + (opts.sigAt || 96) * k;
+      text(label, L, ymid, F(10), '#222');
+      if (value) text(value, nameX, ymid, fitFont(value, 11, (opts.sig !== undefined ? sigX : R) - nameX - 2 * k), '#111');
+      rule(nameX - 1 * k, R, bot - 1.6 * k, 0.25, '#555');
+      if (opts.sig !== undefined) {
+        text('（署名）', sigX, top + 2.6 * k, F(7), '#777');
+        if (opts.sig) page.ops.push({ t: 'sig', strokes: opts.sig, box: { x: sigX + 13 * k, y: top + 0.8 * k, w: R - sigX - 14 * k, h: hmm * k - 2.8 * k } });
+      }
+      y = bot;
+    }
+
+    function signBlock(d, data) {
+      var rows = [[d.labels.date || '同意日', data.dateText, 8.5]];
+      rows.push([d.labels.patient, data.patientName, data.sig.patient ? 15 : 9.5, data.sig.patient || (data.guardian ? undefined : null)]);
+      if (data.guardian) {
+        rows.push([d.labels.guardian, data.guardian.name + '（' + data.guardian.relation + '）', 15, data.sig.guardian]);
+        if (d.guardianNote) rows.push(['', d.guardianNote, 6.5, 'note']);
+      }
+      if (d.labels.address) rows.push([d.labels.address, data.address || '', 9.5]);
+      rows.push([d.labels.doctor, data.doctor || '', 9.5]);
+      var rowsH = 0; rows.forEach(function (r) { rowsH += r[2] * k; });
+      var lhC = 1.62 * 10.5 * pt;
+      var cl = lineCount(d.consent, 10.5, true, R - L);
+      var need = 5 * k + (d.consentHeading ? lhC + 1 * k : 0) + cl * lhC + 3 * k + rowsH;
+      if (room() < need) newPage(); else y += 5 * k;
+      if (d.consentHeading) para(d.consentHeading, { size: 10.5, bold: true, after: 1 });
+      para(d.consent, { size: 10.5, bold: true, after: 3 });
+      rows.forEach(function (r) {
+        if (r[3] === 'note') { text(r[1], L + 40 * k, y + 2.6 * k, F(8), '#555'); y += r[2] * k; return; }
+        formRow(r[0], r[1], r[2], r.length > 3 && r[3] !== undefined ? { sig: r[3] } : {});
+      });
+    }
+    function patientHeader(data) {
+      y += 1 * k;
+      formRow('患者氏名', data.patientName + '　様', 9, { labelW: 22, sigAt: 150 });
+      formRow('生年月日', data.dobText, 9, { labelW: 22, sigAt: 150 });
+      y += 4 * k;
+    }
+    function pledgeHead(d, data) {
+      y += 1 * k;
+      var f = F(10.5);
+      text(data.dateText, R - mw(data.dateText, f), y + 4 * k, f, '#111');
+      y += 10 * k;
+      var startY = y;
+      para(data.address || '', { size: 10.5, marker: d.labels.address + '：', markerMin: 0, lh: 1.6 });
+      rule(L + 12 * k, R, y + 0.6 * k, 0.25, '#555');
+      y += 3 * k;
+      formRow(d.labels.signer + '：', data.signerName, 17, { labelW: 44, sigAt: 100, sig: data.signerSig });
+      y += 6 * k;
+      para(d.statement, { first: 1, after: 1 });
+      return startY;
+    }
+    function pledgeTail(d, data) {
+      y += 2 * k;
+      para('以上', { align: 'right', after: 4 });
+      if (room() < 22 * k) newPage();
+      formRow(d.labels.clinic + '：', CONFIG.clinicName, 10, { labelW: 28 });
+      formRow(d.labels.doctor + '：', data.doctor || '', 10, { labelW: 28 });
+    }
+
+    function layoutDoc(id, data) {
+      var d = DOCUMENTS[id];
+      BASE = d.layout === 'pledge' ? 9.5 : 10;
+      newPage();
+      para(d.title, { size: 15, bold: true, serif: true, align: 'center', lh: 1.5, after: d.subtitle ? 0.6 : 5 });
+      if (d.subtitle) para(d.subtitle, { size: 10, align: 'center', after: 5, color: '#333' });
+      if (d.showPatientHeader) patientHeader(data);
+      if (d.layout === 'pledge') pledgeHead(d, data);
+      var prev = null;
+      d.blocks.forEach(function (b) {
+        var t = b[0];
+        if (t === 'sec') { if (b[2] === 'break' && !atTop()) newPage(); para(b[1], { size: 12.5, bold: true, serif: true, align: 'center', before: prev ? 4 : 1, after: 3, keep: 2 * 1.62 * BASE * pt }); }
+        else if (t === 'lead') para(b[1], { first: 1, before: 1, after: 1.2 });
+        else if (t === 'h') para(b[1], { size: BASE + 0.5, bold: true, before: prev ? 3 : 1, after: 0.6, keep: 2 * 1.62 * BASE * pt });
+        else if (t === 'p') para(b[1], { indent: 3.6, first: 1, after: 0.8 });
+        else if (t === 'imp') para(b[1], { indent: 3.6, bold: true, before: 1.4, after: 0.3, keep: 1.62 * BASE * pt });
+        else if (t === 'item') para(b[2], { indent: b[3] === 2 ? 9.5 : 3.6, marker: b[1], markerMin: b[1].length > 1 ? 1.9 : 1.15, markerBold: /^\*\*.*\*\*$/.test(b[2]), after: 0.45 });
+        else if (t === 'center') para(b[1], { align: 'center', before: 2.5, after: 2.5 });
+        else if (t === 'right') para(b[1], { align: 'right', before: 2 });
+        prev = t;
+      });
+      if (d.layout === 'pledge') pledgeTail(d, data); else signBlock(d, data);
+    }
+
+    function render(i, meta) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+      ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+      var hf = F(7.5);
+      ctx.font = hf; ctx.fillStyle = '#555';
+      ctx.fillText(CONFIG.clinicName, L, 10 * k);
+      ctx.textAlign = 'right'; ctx.fillText('患者氏名：' + meta.patientName + ' 様', R, 10 * k);
+      ctx.fillStyle = '#9aa0a6'; ctx.fillRect(L, 13 * k, R - L, Math.max(1, 0.2 * k));
+      var fy = H - 8.5 * k;
+      ctx.fillStyle = '#555';
+      ctx.textAlign = 'left'; ctx.fillText('受付番号 ' + meta.docId, L, fy);
+      ctx.textAlign = 'center'; ctx.fillText((i + 1) + ' / ' + pages.length, W / 2, fy);
+      ctx.textAlign = 'right'; ctx.fillText('電子署名 ' + meta.signedText + '　版 ' + CONFIG.docVersion, R, fy);
+      ctx.textAlign = 'left';
+      pages[i].ops.forEach(function (op) {
+        if (op.t === 'text') {
+          ctx.font = op.f; ctx.fillStyle = op.c || '#111'; ctx.fillText(op.s, op.x, op.y);
+          if (op.u) ctx.fillRect(op.x, op.y + op.em * 0.6, op.w, Math.max(1, op.em * 0.06));
+        } else if (op.t === 'line') {
+          ctx.fillStyle = op.c; ctx.fillRect(op.x1, op.y - op.w / 2, op.x2 - op.x1, op.w);
+        } else if (op.t === 'sig') {
+          drawSigFit(ctx, op.strokes, op.box, SIG_INK, Math.max(2.4, 0.42 * k), 'left');
+        }
+      });
+    }
+    return { layoutDoc: layoutDoc, render: render, canvas: canvas, pages: pages, W: W, H: H };
+  }
+
+  function canvasJpeg(canvas, q) {
+    return new Promise(function (resolve) {
+      if (canvas.toBlob) canvas.toBlob(function (b) { resolve(b); }, 'image/jpeg', q);
+      else resolve(dataUrlToBlob(canvas.toDataURL('image/jpeg', q)));
+    });
+  }
+  function dataUrlToBlob(u) {
+    var bin = atob(u.split(',')[1]), a = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
+    return new Blob([a], { type: 'image/jpeg' });
+  }
+  function blobBytes(b) {
+    if (b.arrayBuffer) return b.arrayBuffer().then(function (ab) { return new Uint8Array(ab); });
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(new Uint8Array(r.result)); }; r.onerror = rej; r.readAsArrayBuffer(b); });
+  }
+  function blobBase64(b) {
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result).split(',')[1]); }; r.onerror = rej; r.readAsDataURL(b); });
+  }
+  function frame() { return new Promise(function (r) { setTimeout(r, 0); }); }
+  function hexUtf16(s) { var h = 'FEFF'; for (var i = 0; i < s.length; i++) h += ('000' + s.charCodeAt(i).toString(16).toUpperCase()).slice(-4); return '<' + h + '>'; }
+  function randHex(n) { var a = crypto.getRandomValues(new Uint8Array(n)), s = ''; for (var i = 0; i < n; i++) s += ('0' + a[i].toString(16)).slice(-2); return s.toUpperCase(); }
+
+  function buildPdf(images, info) {
+    var enc = new TextEncoder(), chunks = [], len = 0, offs = [];
+    function put(x) { var b = typeof x === 'string' ? enc.encode(x) : x; chunks.push(b); len += b.length; }
+    function begin(n) { offs[n] = len; put(n + ' 0 obj\n'); }
+    function end() { put('\nendobj\n'); }
+    put(new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2D, 0x31, 0x2E, 0x34, 0x0A, 0x25, 0xE2, 0xE3, 0xCF, 0xD3, 0x0A]));
+    var n = images.length, total = 3 + n * 3;
+    var pg = function (i) { return 4 + i * 3; };
+    begin(1); put('<< /Type /Catalog /Pages 2 0 R /Lang (ja-JP) >>'); end();
+    begin(2); put('<< /Type /Pages /Count ' + n + ' /Kids [' + images.map(function (_, i) { return pg(i) + ' 0 R'; }).join(' ') + '] >>'); end();
+    begin(3); put('<< /Title ' + hexUtf16(info.title) + ' /Author ' + hexUtf16(info.author) + ' /Subject ' + hexUtf16(info.subject) +
+      ' /Keywords ' + hexUtf16(info.keywords) + ' /Creator ' + hexUtf16('矯正治療 電子同意書') + ' /Producer (consent-web) /CreationDate (' + info.date + ') /ModDate (' + info.date + ') >>'); end();
+    images.forEach(function (im, i) {
+      var cs = 'q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+      begin(pg(i)); put('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ' + (pg(i) + 2) + ' 0 R >> /ProcSet [/PDF /ImageC] >> /Contents ' + (pg(i) + 1) + ' 0 R >>'); end();
+      begin(pg(i) + 1); put('<< /Length ' + cs.length + ' >>\nstream\n' + cs + '\nendstream'); end();
+      begin(pg(i) + 2); put('<< /Type /XObject /Subtype /Image /Width ' + im.w + ' /Height ' + im.h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + im.bytes.length + ' >>\nstream\n');
+      put(im.bytes); put('\nendstream'); end();
+    });
+    var xref = len, x = 'xref\n0 ' + (total + 1) + '\n0000000000 65535 f \n';
+    for (var i = 1; i <= total; i++) x += ('000000000' + offs[i]).slice(-10) + ' 00000 n \n';
+    put(x);
+    put('trailer\n<< /Size ' + (total + 1) + ' /Root 1 0 R /Info 3 0 R /ID [<' + info.id + '> <' + info.id + '>] >>\nstartxref\n' + xref + '\n%%EOF\n');
+    var out = new Uint8Array(len), p = 0;
+    chunks.forEach(function (c) { out.set(c, p); p += c.length; });
+    return out;
+  }
+
+  function pdfData() {
+    var info = readInfo(), t = jstNow(state.signedAt);
+    var minor = !!info.guardian;
+    return {
+      docId: state.docId,
+      dateText: fmtDate(t),
+      signedText: t.y + '/' + pad2(t.m) + '/' + pad2(t.d) + ' ' + pad2(t.H) + ':' + pad2(t.M),
+      patientName: info.name,
+      dobText: info.dob ? fmtDob(info.dob) : '',
+      address: info.address,
+      guardian: info.guardian,
+      doctor: info.doctor,
+      sig: { patient: state.sig.patient, guardian: minor ? state.sig.guardian : null },
+      signerName: minor ? info.guardian.name + '（保護者）' : info.name,
+      signerSig: minor ? state.sig.guardian : state.sig.patient
+    };
+  }
+  async function makePdf(progress) {
+    var data = pdfData();
+    var lay = PdfLayout(CONFIG.pdfDpi);
+    state.docs.forEach(function (id) { lay.layoutDoc(id, data); });
+    var imgs = [], previews = [];
+    for (var i = 0; i < lay.pages.length; i++) {
+      if (progress) progress(i + 1, lay.pages.length);
+      lay.render(i, data);
+      var blob = await canvasJpeg(lay.canvas, 0.8);
+      imgs.push({ bytes: await blobBytes(blob), w: lay.W, h: lay.H });
+      previews.push(URL.createObjectURL(blob));
+      await frame();
+    }
+    var t = jstNow(state.signedAt);
+    var p = currentPlan();
+    var bytes = buildPdf(imgs, {
+      title: '矯正治療 同意書（' + data.patientName + ' 様）',
+      author: CONFIG.clinicName,
+      subject: '受付番号 ' + state.docId,
+      keywords: p.label + ' / ' + state.docs.map(docTitle).join(' / '),
+      date: 'D:' + t.y + pad2(t.m) + pad2(t.d) + pad2(t.H) + pad2(t.M) + pad2(t.S) + "+09'00'",
+      id: randHex(16)
+    });
+    var blob2 = new Blob([bytes], { type: 'application/pdf' });
+    var safe = data.patientName.replace(/[\\\/:*?"<>|\s]/g, '');
+    return {
+      bytes: bytes, blob: blob2, url: URL.createObjectURL(blob2), previews: previews, pages: lay.pages.length,
+      filename: '矯正治療同意書_' + safe + '_' + t.y + pad2(t.m) + pad2(t.d) + '.pdf'
+    };
+  }
+
+  /* ======================================================================
+     送信
+     ====================================================================== */
+  function makeDocId(t) {
+    var A = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ', r = crypto.getRandomValues(new Uint8Array(6)), s = '';
+    for (var i = 0; i < r.length; i++) s += A[r[i] & 31];
+    return t.y + pad2(t.m) + pad2(t.d) + '-' + s;
+  }
+  async function sha256Hex(bytes) {
+    try {
+      if (!window.crypto || !crypto.subtle) return '';
+      var h = new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), s = '';
+      for (var i = 0; i < h.length; i++) s += ('0' + h[i].toString(16)).slice(-2);
+      return s;
+    } catch (e) { return ''; }
+  }
+  function gasRun() { return !!(window.google && google.script && google.script.run); }
+  async function payload() {
+    var info = readInfo(), p = currentPlan(), t = jstNow(state.signedAt);
+    return {
+      key: CONFIG.formKey,
+      docId: state.docId,
+      version: CONFIG.docVersion,
+      signedAt: state.signedAt.toISOString(),
+      signedAtJst: t.y + '-' + pad2(t.m) + '-' + pad2(t.d) + ' ' + pad2(t.H) + ':' + pad2(t.M) + ':' + pad2(t.S),
+      plan: { id: p.id, label: p.label },
+      options: OPTIONS.filter(function (o) { return state.options[o.id]; }).map(function (o) { return { id: o.id, label: o.label }; }),
+      documents: state.docs.map(docTitle),
+      patient: { name: info.name, kana: info.kana, dob: info.dob ? info.dob.y + '-' + pad2(info.dob.m) + '-' + pad2(info.dob.d) : '', age: patientAge(), cardNo: info.card },
+      guardian: info.guardian,
+      signer: info.guardian ? 'guardian' : 'patient',
+      patientSigned: !!state.sig.patient,
+      doctor: info.doctor,
+      device: navigator.userAgent.slice(0, 300),
+      pdfName: state.pdf.filename,
+      pdfSha256: await sha256Hex(state.pdf.bytes),
+      pdfBase64: await blobBase64(state.pdf.blob)
+    };
+  }
+  async function send() {
+    if (!CONFIG.endpoint && !gasRun()) return { ok: false, preview: true };
+    var body = await payload();
+    if (gasRun()) {
+      return new Promise(function (resolve) {
+        google.script.run.withSuccessHandler(function (r) { resolve(r || { ok: false, error: 'empty' }); })
+          .withFailureHandler(function (e) { resolve({ ok: false, error: String(e && e.message || e) }); })
+          .submitConsent(body);
+      });
+    }
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 90000);
+    try {
+      var res = await fetch(CONFIG.endpoint, { method: 'POST', body: JSON.stringify(body), redirect: 'follow', signal: ctrl ? ctrl.signal : undefined, credentials: 'omit' });
+      var txt = await res.text();
+      try { return JSON.parse(txt); } catch (e) { return { ok: false, error: 'bad_response' }; }
+    } catch (e) {
+      return { ok: false, error: e && e.name === 'AbortError' ? 'timeout' : 'network' };
+    } finally { clearTimeout(timer); }
+  }
+
+  var busyEl = $('#busy');
+  function busy(on, textMsg) { busyEl.hidden = !on; if (textMsg) $('#busy-text').textContent = textMsg; }
+
+  async function submitAll() {
+    if (computeDocs().join() !== state.docs.join() || !state.docs.every(function (d) { return state.agreed[d]; })) {
+      showErr('sign-err', '同意書の確認が終わっていないものがあります。「戻る」から内容をご確認ください。');
+      return;
+    }
+    var roles = sigRoles(), first = null;
+    roles.forEach(function (r) {
+      if (r.required && !state.sig[r.key]) {
+        var f = $('.sigfield[data-role="' + r.key + '"]'); f.classList.add('invalid'); if (!first) first = f;
+      }
+    });
+    if (first) { showErr('sign-err', '署名欄をタップして、署名してください。'); first.scrollIntoView({ block: 'center' }); return; }
+    showErr('sign-err', '');
+    if (!readInfo().guardian) state.sig.guardian = null;
+
+    state.signedAt = new Date();
+    if (!state.docId) state.docId = makeDocId(jstNow(state.signedAt));
+    if (state.pdf) releasePdf();
+    busy(true, 'PDFを作成しています…');
+    try {
+      state.pdf = await makePdf(function (i, n) { $('#busy-text').textContent = 'PDFを作成しています…（' + i + ' / ' + n + 'ページ）'; });
+    } catch (e) {
+      console.error(e);
+      busy(false);
+      showErr('sign-err', 'PDFを作成できませんでした。もう一度「同意して送信する」を押してください。');
+      return;
+    }
+    await sendAndShow();
+  }
+  async function sendAndShow() {
+    busy(true, CONFIG.endpoint || gasRun() ? '医院に送信しています…' : 'PDFを準備しています…');
+    state.submit.status = 'sending';
+    var r;
+    try { r = await send(); } catch (e) { console.error(e); r = { ok: false, error: 'client' }; }
+    busy(false);
+    if (r.preview) state.submit = { status: 'preview' };
+    else if (r.ok) state.submit = { status: 'ok', receipt: r.receipt || state.docId };
+    else { state.submit = { status: 'error', error: r.error }; console.warn('送信エラー:', r.error); }
+    renderDone();
+    goStep('done');
+  }
+
+  /* ======================================================================
+     5. 完了
+     ====================================================================== */
+  function renderDone() {
+    var s = state.submit, t = jstNow(state.signedAt);
+    var stamp = $('#stamp');
+    if (s.status === 'ok') stamp.removeAttribute('hidden'); else stamp.setAttribute('hidden', '');
+    stamp.classList.remove('press');
+    if (s.status === 'ok') {
+      $('#stamp-top').textContent = CONFIG.stampName;
+      $('#stamp-date').textContent = t.y + '.' + pad2(t.m) + '.' + pad2(t.d);
+      void stamp.getBoundingClientRect();
+      stamp.classList.add('press');
+    }
+    var title = s.status === 'ok' ? '同意書を送信しました' : s.status === 'error' ? '医院への送信ができませんでした' : '同意書のPDFを作成しました';
+    $('#h-done').textContent = title;
+    var rc = $('#receipt');
+    clear(rc);
+    if (s.status === 'ok') { append(rc, ['受付番号　', el('b', null, s.receipt)]); rc.hidden = false; } else rc.hidden = true;
+
+    var nb = $('#done-notice'); clear(nb);
+    if (s.status === 'ok') {
+      nb.appendChild(el('div', { class: 'notice' }, el('p', null, '署名済みの同意書は医院に届きました。控えとして、下のボタンからPDFを保存してください。')));
+    } else if (s.status === 'error') {
+      var retry = el('button', { type: 'button', class: 'btn primary small', style: 'margin-top:12px' }, 'もう一度送信する');
+      retry.addEventListener('click', function () { sendAndShow(); });
+      nb.appendChild(el('div', { class: 'notice error' },
+        el('p', null, '通信状況をご確認のうえ、「もう一度送信する」を押してください。'),
+        el('p', null, 'うまくいかない場合は、この画面を受付スタッフにお見せください。'),
+        retry));
+    } else {
+      nb.appendChild(el('div', { class: 'notice test' },
+        el('p', null, el('strong', null, 'テスト表示です。'), '送信先（Google Apps Script のURL）が設定されていないため、医院への送信は行われていません。'),
+        el('p', null, 'PDFの保存・表示はこのまま確認できます。')));
+    }
+    var pdf = state.pdf;
+    var save = $('#pdf-save'); save.href = pdf.url; save.setAttribute('download', pdf.filename);
+    $('#pdf-open').href = pdf.url;
+    var share = $('#pdf-share');
+    var file = null;
+    try { file = new File([pdf.blob], pdf.filename, { type: 'application/pdf' }); } catch (e) {}
+    share.hidden = !(file && navigator.canShare && navigator.canShare({ files: [file] }));
+    share.onclick = function () {
+      navigator.share({ files: [file], title: '矯正治療 同意書' }).catch(function (e) { if (e && e.name !== 'AbortError') save.click(); });
+    };
+    $('#thumbs-cap').textContent = 'PDFの内容（全' + pdf.pages + 'ページ）';
+    var th = $('#thumbs'); clear(th);
+    pdf.previews.forEach(function (u, i) {
+      th.appendChild(el('a', { href: pdf.url, target: '_blank', rel: 'noopener', 'aria-label': (i + 1) + 'ページ目を開く' }, el('img', { src: u, alt: (i + 1) + 'ページ目', loading: 'lazy' })));
+    });
+  }
+  function releasePdf() {
+    if (!state.pdf) return;
+    try { URL.revokeObjectURL(state.pdf.url); state.pdf.previews.forEach(function (u) { URL.revokeObjectURL(u); }); } catch (e) {}
+    state.pdf = null;
+  }
+  function restart() {
+    if (state.pdf && !confirm(state.submit.status === 'ok'
+      ? '入力内容を消去して最初の画面に戻ります。控えのPDFは保存しましたか？'
+      : '入力内容と署名を消去して、最初の画面に戻りますか？')) return;
+    releasePdf();
+    state = freshState();
+    $('#info-form').reset();
+    $('#f-grel-other').hidden = true;
+    fillDays(); updateAge(); clearFieldErrors();
+    $$('#plan-groups input').forEach(function (i) { i.checked = false; });
+    onPlanChange();
+    clear($('#thumbs'));
+    goStep('plan', { replace: true });
+  }
+
+  /* ======================================================================
+     初期化
+     ====================================================================== */
+  function setFs(v) {
+    document.documentElement.setAttribute('data-fs', v);
+    $$('.fs-btns button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-fs') === v)); });
+  }
+  function applyUrlParams() {
+    var q;
+    try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    var plan = q.get('plan');
+    if (plan) { var r = $('#plan-' + plan); if (r && r.name === 'plan') r.checked = true; }
+    (q.get('opt') || '').split(',').forEach(function (o) { var c = $('#opt-' + o.trim()); if (c) c.checked = true; });
+    onPlanChange();
+  }
+  function init() {
+    document.title = '矯正治療の同意書｜' + CONFIG.clinicName;
+    $('#testbar').hidden = !!(CONFIG.endpoint || gasRun());
+    $('#clinic-name').textContent = CONFIG.clinicName;
+    $('#foot').textContent = '入力内容と署名は' + CONFIG.clinicName + 'にのみ送信され、この端末には保存されません。';
+    $$('.fs-btns button').forEach(function (b) { b.addEventListener('click', function () { setFs(b.getAttribute('data-fs')); }); });
+    buildPlanStep();
+    buildInfoStep();
+    bindRead();
+    applyUrlParams();
+
+    $('#plan-next').addEventListener('click', function () {
+      if (!state.plan) { showErr('plan-err', '受ける治療を1つ選んでください。'); $('#plan-err').scrollIntoView({ block: 'center' }); return; }
+      updateGuardian();
+      goStep('info');
+    });
+    $('#info-next').addEventListener('click', function () {
+      if (!validateInfo()) return;
+      var docs = computeDocs();
+      var agreed = {};
+      docs.forEach(function (d) { if (state.agreed[d]) agreed[d] = true; });
+      state.agreed = agreed;
+      state.docs = docs;
+      state.readIndex = 0;
+      renderRead();
+      goStep('read');
+    });
+    $('#sign-submit').addEventListener('click', function () { submitAll(); });
+    $('#restart').addEventListener('click', restart);
+    $$('[data-back]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (current === 'read' && state.readIndex > 0) { state.readIndex--; renderRead(); goStep('read'); return; }
+        var prev = { info: 'plan', read: 'info', sign: 'read' }[current];
+        if (prev === 'read') { state.readIndex = state.docs.length - 1; renderRead(); }
+        if (prev) goStep(prev);
+      });
+    });
+    goStep('plan', { replace: true, noFocus: true });
+  }
+  init();
+
+  /* テスト用フック（動作確認のため。通常は使いません） */
+  window.__consent = { state: function () { return state; }, cfg: CONFIG };
+})();
+</script>
+</body>
+</html>
